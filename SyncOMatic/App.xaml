@@ -4,6 +4,12 @@
              xmlns:local="clr-namespace:SyncOMatic"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" />
+        </Style>
+        <Style x:Key="ButtonsGroup" TargetType="Button">
+            <Setter Property="Margin" Value="2,5"/>
+            <Setter Property="MinWidth" Value="50" />
+        </Style>
     </Application.Resources>
 </Application>

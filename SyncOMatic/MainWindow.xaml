@@ -7,15 +7,6 @@
         mc:Ignorable="d"
         Title="Sync-O-Matic" Height="450" Width="800"
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-    <Window.Resources>
-        <Style TargetType="GroupBox">
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" />
-        </Style>
-        <Style x:Key="ButtonsGroup" TargetType="Button">
-            <Setter Property="Margin" Value="2,5"/>
-            <Setter Property="MinWidth" Value="50" />
-        </Style>
-    </Window.Resources>
     <DockPanel Margin="5">
         <GroupBox DockPanel.Dock="Top" Header="System">
             <Grid>
@@ -55,7 +46,7 @@
                         <WrapPanel.Resources>
                             <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
                         </WrapPanel.Resources>
-                        <Button Content="Dodaj"/>
+                        <Button Content="Dodaj" Click="AddDevice_Click" />
                         <Button Content="Zmień"/>
                         <Button Content="Usuń"/>
                     </WrapPanel>
@@ -65,7 +56,7 @@
                                 <GridViewColumn Header="">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox></CheckBox>
+                                            <CheckBox />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
