@@ -21,7 +21,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Label>Nazwa hosta:</Label>
-                <Label Grid.Column="1">{Nazwa hosta}</Label>
+                <Label Grid.Column="1" Content="{Binding Hostname}" />
                 <Label Grid.Row="1">Adres IP:</Label>
                 <Label Grid.Row="1" Grid.Column="1">{Adres IP}</Label>
             </Grid>
@@ -70,7 +70,7 @@
                         <ListViewItem>Komputer 1</ListViewItem>
                     </ListView>
                 </DockPanel>
-                <StackPanel Grid.Column="1">
+                <StackPanel Grid.Column="1" Margin="5">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>

@@ -37,8 +37,8 @@
                 <Label Padding="5,0" VerticalAlignment="Center">Kierunek synchronizacji:</Label>
                 <ComboBox Name="syncDirection" Grid.Row="4" Grid.Column="1">
                     <ComboBoxItem IsSelected="True">Wyślij i pobierz</ComboBoxItem>
-                    <ComboBoxItem>Tylko wyślij</ComboBoxItem>
                     <ComboBoxItem>Tylko pobierz</ComboBoxItem>
+                    <ComboBoxItem>Tylko wyślij</ComboBoxItem>
                 </ComboBox>
             </WrapPanel>
                 
