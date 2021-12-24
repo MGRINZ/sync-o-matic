@@ -45,7 +45,7 @@
                         <WrapPanel.Resources>
                             <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
                         </WrapPanel.Resources>
-                        <Button Content="Dodaj" />
+                        <Button Content="Dodaj" Click="AddSharedFolder_Click" />
                         <Button Content="Zmień" />
                         <Button Content="Usuń" />
                     </WrapPanel>
@@ -86,7 +86,7 @@
                         <WrapPanel.Resources>
                             <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
                         </WrapPanel.Resources>
-                        <Button Content="Dodaj" />
+                        <Button Content="Dodaj" Click="AddSyncRule_Click" />
                         <Button Content="Zmień" />
                         <Button Content="Usuń" />
                     </WrapPanel>

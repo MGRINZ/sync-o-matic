@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,23 +15,13 @@ using System.Windows.Shapes;
 namespace SyncOMatic
 {
     /// <summary>
-    /// Logika interakcji dla klasy RemoteDeviceWindow.xaml
+    /// Logika interakcji dla klasy SharedFolderWindow.xaml
     /// </summary>
-    public partial class RemoteDeviceWindow : Window
+    public partial class SharedFolderWindow : Window
     {
-        public RemoteDeviceWindow()
+        public SharedFolderWindow()
         {
             InitializeComponent();
-        }
-
-        private void AddSharedFolder_Click(object sender, RoutedEventArgs e)
-        {
-            new SharedFolderWindow().Show();
-        }
-
-        private void AddSyncRule_Click(object sender, RoutedEventArgs e)
-        {
-            new SyncDetailsWindow().Show();
         }
     }
 }
