@@ -26,7 +26,14 @@ namespace SyncOMatic
 
         private void AddExclusion_Click(object sender, RoutedEventArgs e)
         {
-            new ExclusionDialog().Show();
+            var eDialog = new ExclusionDialog();
+            eDialog.Owner = this;
+            eDialog.ShowDialog();
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

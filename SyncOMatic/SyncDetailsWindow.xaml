@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:SyncOMatic"
         mc:Ignorable="d"
         Title="Ustawienia synchronizacji" Height="450" Width="450"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
     <DockPanel Margin="5">
         <Grid DockPanel.Dock="Top">
@@ -46,7 +48,7 @@
                 <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
             </WrapPanel.Resources>
             <Button Content="Zapisz" />
-            <Button Content="Anuluj" />
+            <Button Content="Anuluj" Click="Cancel_Click" />
         </WrapPanel>
         <GroupBox Header="Wykluczenia">
             <DockPanel>

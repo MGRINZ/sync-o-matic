@@ -24,12 +24,21 @@ namespace SyncOMatic
 
         private void AddSharedFolder_Click(object sender, RoutedEventArgs e)
         {
-            new SharedFolderWindow().Show();
+            var sfWindow = new SharedFolderWindow();
+            sfWindow.Owner = this;
+            sfWindow.ShowDialog();
         }
 
         private void AddSyncRule_Click(object sender, RoutedEventArgs e)
         {
-            new SyncDetailsWindow().Show();
+            var sdWindow = new SyncDetailsWindow();
+            sdWindow.Owner = this;
+            sdWindow.ShowDialog();
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

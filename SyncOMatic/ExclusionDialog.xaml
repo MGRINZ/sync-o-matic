@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="Wykluczenie" Height="150" Width="350"
         SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
+        ShowInTaskbar="False"
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
     <StackPanel Margin="5">
         <Label>Wartość wykluczenia</Label>
@@ -17,7 +19,7 @@
                 <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
             </WrapPanel.Resources>
             <Button Content="Zapisz" />
-            <Button Content="Anuluj" />
+            <Button Content="Anuluj" Click="Cancel_Click" />
         </WrapPanel>
     </StackPanel>
 </Window>

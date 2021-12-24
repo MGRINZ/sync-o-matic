@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SyncOMatic"
         mc:Ignorable="d"
-        Title="Sync-O-Matic" Height="450" Width="800"
+        Title="Sync-O-Matic" Height="550" Width="800"
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
     <DockPanel Margin="5">
         <GroupBox DockPanel.Dock="Top" Header="System">
@@ -33,7 +33,7 @@
                 </Style>
             </WrapPanel.Resources>
             <Button Content="Ustawienia" />
-            <Button Content="Zamknij"/>
+            <Button Content="Zamknij" Click="Close_Click" />
         </WrapPanel>
         <GroupBox Header="Urządzenia zdalne">
             <Grid>

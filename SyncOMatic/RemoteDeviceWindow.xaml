@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SyncOMatic"
         mc:Ignorable="d"
-        Title="Dodaj urządzenie zdalne" Height="450" Width="500"
+        Title="Dodaj urządzenie zdalne" Height="500" Width="500"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
     <DockPanel Margin="5">
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right">
@@ -13,7 +15,7 @@
                 <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
             </WrapPanel.Resources>
             <Button Content="Zapisz" />
-            <Button Content="Anuluj" />
+            <Button Content="Anuluj" Click="Cancel_Click" />
         </WrapPanel>
         <GroupBox DockPanel.Dock="Top" Header="Właściwości">
             <Grid>

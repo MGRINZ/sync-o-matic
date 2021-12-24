@@ -27,7 +27,14 @@ namespace SyncOMatic
 
         private void AddDevice_Click(object sender, RoutedEventArgs e)
         {
-            new RemoteDeviceWindow().Show();
+            var rdWindow = new RemoteDeviceWindow();
+            rdWindow.Owner = this;
+            rdWindow.ShowDialog();
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
