@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,18 +16,25 @@ namespace SyncOMatic
     /// <summary>
     /// Logika interakcji dla klasy RemoteDeviceWindow.xaml
     /// </summary>
-    public partial class RemoteDeviceWindow : AddEditDeleteWindow
+    public partial class RemoteDeviceWindow : AddEditDeleteWindow, IAddEditDelete
     {
-        public RemoteDevice RemoteDevice { get; set; }
+        private RemoteDevice remoteDevice;
+        private bool save = false;
+
+        public RemoteDevice RemoteDevice
+        {
+            get => remoteDevice;
+            set
+            {
+                remoteDevice = (RemoteDevice)value.Clone();
+                this.DataContext = remoteDevice;
+            }
+        }
 
         public RemoteDeviceWindow()
         {
             InitializeComponent();
-
-            if (RemoteDevice == null)
-                RemoteDevice = new RemoteDevice();
-
-            this.DataContext = RemoteDevice;
+            RemoteDevice = new RemoteDevice();
         }
 
         private void AddSharedFolder_Click(object sender, RoutedEventArgs e)
@@ -54,9 +62,32 @@ namespace SyncOMatic
             sdWindow.ShowDialog();
         }
 
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            save = true;
+
+            Close();
+        }
+
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            if (!save)
+                remoteDevice = null;
+        }
+
+        public object GetItem()
+        {
+            return RemoteDevice;
+        }
+
+        public void SetItem(object item)
+        {
+            RemoteDevice = item as RemoteDevice;
         }
     }
 }

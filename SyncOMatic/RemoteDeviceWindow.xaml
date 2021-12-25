@@ -9,13 +9,14 @@
         Title="Dodaj urządzenie zdalne" Height="500" Width="500" MinHeight="500" MinWidth="500"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
-        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+        Closing="Window_Closing" >
     <DockPanel Margin="5">
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right">
             <WrapPanel.Resources>
                 <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
             </WrapPanel.Resources>
-            <Button Content="Zapisz" />
+            <Button Content="Zapisz" Click="Save_Click" />
             <Button Content="Anuluj" Click="Cancel_Click" />
         </WrapPanel>
         <GroupBox DockPanel.Dock="Top" Header="Właściwości">

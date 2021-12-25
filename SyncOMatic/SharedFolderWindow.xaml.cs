@@ -10,7 +10,7 @@ namespace SyncOMatic
     public partial class SharedFolderWindow : Window, IAddEditDelete
     {
         private SharedFolder sharedFolder;
-        private bool save;
+        private bool save = false;
 
         public SharedFolder SharedFolder
         {
@@ -65,6 +65,12 @@ namespace SyncOMatic
         public void SetItem(object item)
         {
             SharedFolder = item as SharedFolder;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.MinHeight = this.Height;
+            this.MaxHeight = this.Height;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace SyncOMatic
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : AddEditDeleteWindow
     {
         public string Hostname { get; private set; }
         public string IpAddress { get; private set; }
@@ -30,13 +30,38 @@ namespace SyncOMatic
             InitializeComponent();
             this.DataContext = this;
             Hostname = System.Net.Dns.GetHostName();
+
+            RemoteDevices = new ObservableCollection<RemoteDevice>();
         }
 
         private void AddDevice_Click(object sender, RoutedEventArgs e)
         {
             var rdWindow = new RemoteDeviceWindow();
-            rdWindow.Owner = this;
-            rdWindow.ShowDialog();
+            AddItem(rdWindow, RemoteDevices);
+            if (rdWindow.RemoteDevice != null)
+            {
+                Task updateTask = rdWindow.RemoteDevice.UpdateHostnameAsync();
+            }
+        }
+
+        private void EditDevice_Click(object sender, RoutedEventArgs e)
+        {
+            var rdWindow = new RemoteDeviceWindow();
+            EditItem(rdWindow, remoteDevicesListView, RemoteDevices);
+            Task updateTask = rdWindow.RemoteDevice.UpdateHostnameAsync();
+        }
+
+        private void DeleteDevice_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteItem(remoteDevicesListView, RemoteDevices);
+        }
+
+        private void UpdateHostnames()
+        {
+            foreach (RemoteDevice remoteDevice in RemoteDevices)
+            {
+                Task updateTask = remoteDevice.UpdateHostnameAsync();
+            }
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
