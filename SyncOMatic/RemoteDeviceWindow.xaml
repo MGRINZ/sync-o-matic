@@ -1,4 +1,4 @@
-﻿<Window x:Class="SyncOMatic.RemoteDeviceWindow"
+﻿<local:AddEditDeleteWindow x:Class="SyncOMatic.RemoteDeviceWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -68,6 +68,11 @@
                         <Button Content="Usuń" Click="DeleteSharedFolder_Click" />
                     </WrapPanel>
                     <ListView Name="sharedFoldersListView" ItemsSource="{Binding SharedFolders}">
+                        <ListView.Resources>
+                            <Style TargetType="ListViewItem">
+                                <EventSetter Event="MouseDoubleClick" Handler="EditSharedFolder_Click" />
+                            </Style>
+                        </ListView.Resources>
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="">
@@ -129,4 +134,4 @@
             </GroupBox>
         </Grid>
     </DockPanel>
-</Window>
+</local:AddEditDeleteWindow>

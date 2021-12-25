@@ -15,7 +15,7 @@ namespace SyncOMatic
     /// <summary>
     /// Logika interakcji dla klasy RemoteDeviceWindow.xaml
     /// </summary>
-    public partial class RemoteDeviceWindow : Window
+    public partial class RemoteDeviceWindow : AddEditDeleteWindow
     {
         public RemoteDevice RemoteDevice { get; set; }
 
@@ -32,31 +32,19 @@ namespace SyncOMatic
         private void AddSharedFolder_Click(object sender, RoutedEventArgs e)
         {
             var sfWindow = new SharedFolderWindow();
-            sfWindow.Owner = this;
-            sfWindow.ShowDialog();
-            if (sfWindow.SharedFolder != null)
-                RemoteDevice.SharedFolders.Add(sfWindow.SharedFolder);
+            AddItem(sfWindow, RemoteDevice.SharedFolders);
         }
 
         private void EditSharedFolder_Click(object sender, RoutedEventArgs e)
         {
             var sfWindow = new SharedFolderWindow();
-            sfWindow.Owner = this;
-
-            if (sharedFoldersListView.SelectedItem == null)
-                return;
-
-            sfWindow.SharedFolder = sharedFoldersListView.SelectedItem as SharedFolder;
-            sfWindow.ShowDialog();
-
-            if (sfWindow.SharedFolder != null)
-                RemoteDevice.SharedFolders[sharedFoldersListView.SelectedIndex] = sfWindow.SharedFolder;
+            sfWindow.Title = "Edytuj udostępniony folder";
+            EditItem(sfWindow, sharedFoldersListView, RemoteDevice.SharedFolders);
         }
 
         private void DeleteSharedFolder_Click(object sender, RoutedEventArgs e)
         {
-            if (sharedFoldersListView.SelectedItem != null)
-                RemoteDevice.SharedFolders.Remove(sharedFoldersListView.SelectedItem as SharedFolder);
+            DeleteItem(sharedFoldersListView, RemoteDevice.SharedFolders);
         }
 
         private void AddSyncRule_Click(object sender, RoutedEventArgs e)

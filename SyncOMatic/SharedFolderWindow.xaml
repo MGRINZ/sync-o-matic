@@ -9,7 +9,8 @@
         SizeToContent="Height"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
-        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+        Closing="Window_Closing">
     <StackPanel Margin="5">
         <Grid>
             <Grid.ColumnDefinitions>
