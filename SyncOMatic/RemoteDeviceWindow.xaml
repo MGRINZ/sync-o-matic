@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SyncOMatic"
+        xmlns:local1="clr-namespace:SyncOMatic.ValidationRules"
         mc:Ignorable="d"
-        Title="Dodaj urządzenie zdalne" Height="500" Width="500"
+        Title="Dodaj urządzenie zdalne" Height="500" Width="500" MinHeight="500" MinWidth="500"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
@@ -29,12 +30,27 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Label>Nazwa:</Label>
-            <TextBox Grid.Column="1" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding Name}" />
             <Label Grid.Row="1">Adres IP:</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
-            <Label Grid.Row="2">Port:</Label>
-            <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
-        </Grid>
+                <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+                    <Binding Path="IpAddress">
+                        <Binding.Converter>
+                            <local:IPAddressStringConverter />
+                        </Binding.Converter>
+                        <Binding.ValidationRules>
+                            <local1:IPAddressValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox>
+                <Label Grid.Row="2">Port:</Label>
+                <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" MaxLength="5" >
+                    <Binding Path="Port">
+                        <Binding.ValidationRules>
+                            <local1:PortValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox>
+            </Grid>
         </GroupBox>
         <Grid>
             <Grid.RowDefinitions>
@@ -48,37 +64,36 @@
                             <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
                         </WrapPanel.Resources>
                         <Button Content="Dodaj" Click="AddSharedFolder_Click" />
-                        <Button Content="Zmień" />
-                        <Button Content="Usuń" />
+                        <Button Content="Zmień" Click="EditSharedFolder_Click" />
+                        <Button Content="Usuń" Click="DeleteSharedFolder_Click" />
                     </WrapPanel>
-                    <ListView>
+                    <ListView Name="sharedFoldersListView" ItemsSource="{Binding SharedFolders}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox />
+                                            <CheckBox IsChecked="{Binding IsActive}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Ścieżka" />
+                                <GridViewColumn Header="Ścieżka" DisplayMemberBinding="{Binding Path}" />
                                 <GridViewColumn Header="Odczyt">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox />
+                                            <CheckBox IsChecked="{Binding CanRead}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Header="Zapis">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox />
+                                            <CheckBox IsChecked="{Binding CanWrite}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                             </GridView>
                         </ListView.View>
-                        <ListViewItem></ListViewItem>
                     </ListView>
                 </DockPanel>
             </GroupBox>

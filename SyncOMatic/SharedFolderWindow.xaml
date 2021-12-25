@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SyncOMatic"
+        xmlns:local="clr-namespace:SyncOMatic" xmlns:local1="clr-namespace:SyncOMatic.ValidationRules"
         mc:Ignorable="d"
         Title="Udostępnij folder" Height="200" Width="450"
         SizeToContent="Height"
@@ -21,21 +21,27 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Grid.ColumnSpan="2">Ścieżka katalogu:</Label>
-            <TextBox Grid.Row="1" />
-            <Button Grid.Row="1" Grid.Column="1" Margin="10,0,0,0">Wybierz...</Button>
+            <TextBox Grid.Row="1">
+                <Binding Path="Path">
+                    <Binding.ValidationRules>
+                        <local1:PathValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox>
+            <Button Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" Click="SelectDir_Click" >Wybierz...</Button>
         </Grid>
         <GroupBox Header="Prawa dostępu">
             <StackPanel>
-                <CheckBox>Odczyt</CheckBox>
-                <CheckBox>Zapis</CheckBox>
+                <CheckBox IsChecked="{Binding CanRead}" >Odczyt</CheckBox>
+                <CheckBox IsChecked="{Binding CanWrite}" >Zapis</CheckBox>
             </StackPanel>
         </GroupBox>
         <WrapPanel HorizontalAlignment="Right">
             <WrapPanel.Resources>
                 <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
             </WrapPanel.Resources>
-            <Button Content="Zapisz" />
-            <Button Content="Anuluj" Click="Cancel_Click" />
+            <Button Content="Zapisz" Click="Save_Click" />
+            <Button Content="Anuluj" Click="Cancel_Click" IsCancel="True" />
         </WrapPanel>
     </StackPanel>
 </Window>
