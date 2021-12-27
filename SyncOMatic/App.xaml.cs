@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -13,5 +14,20 @@ namespace SyncOMatic
     /// </summary>
     public partial class App : Application
     {
+        public static ObservableCollection<RemoteDevice> RemoteDevices { get; private set; }
+
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            RemoteDevices = new ObservableCollection<RemoteDevice>();
+            SyncServer.GetInstance().Start();
+
+            var mWindow = new MainWindow(RemoteDevices);
+            mWindow.Show();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+        }
     }
 }

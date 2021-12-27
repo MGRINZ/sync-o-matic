@@ -32,7 +32,7 @@
             <Button Grid.Row="1" Grid.Column="1" Margin="10,0,0,0">Wybierz...</Button>
             <Label Grid.Row="2" Grid.ColumnSpan="2">Katalog zdalny:</Label>
             <TextBox Grid.Row="3" />
-            <Button Grid.Row="3" Grid.Column="1" Margin="10,0,0,0">Wybierz...</Button>
+            <Button Grid.Row="3" Grid.Column="1" Margin="10,0,0,0" Click="SelectRemoteDir_Click" >Wybierz...</Button>
             <WrapPanel Grid.Row="4" Grid.ColumnSpan="2" Margin="0,5">
                 <Label Padding="5,0" VerticalAlignment="Center">Kierunek synchronizacji:</Label>
                 <ComboBox Name="syncDirection" Grid.Row="4" Grid.Column="1">

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,10 +20,20 @@ namespace SyncOMatic
     /// </summary>
     public partial class SyncDetailsWindow : Window
     {
+        private IPAddress ipAddress;
+        private short port;
+
         public SyncDetailsWindow()
         {
             InitializeComponent();
         }
+
+        public SyncDetailsWindow(IPAddress ipAddress, short port) : this()
+        {
+            this.ipAddress = ipAddress;
+            this.port = port;
+        }
+
 
         private void AddExclusion_Click(object sender, RoutedEventArgs e)
         {
@@ -34,6 +45,13 @@ namespace SyncOMatic
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void SelectRemoteDir_Click(object sender, RoutedEventArgs e)
+        {
+            var rfbDialog = new RemoteFolderBrowserDialog(ipAddress, port);
+            rfbDialog.Owner = this;
+            rfbDialog.ShowDialog();
         }
     }
 }

@@ -30,8 +30,11 @@ namespace SyncOMatic
             InitializeComponent();
             this.DataContext = this;
             Hostname = System.Net.Dns.GetHostName();
+        }
 
-            RemoteDevices = new ObservableCollection<RemoteDevice>();
+        public MainWindow(ObservableCollection<RemoteDevice> remoteDevices) : this()
+        {
+            RemoteDevices = remoteDevices;
         }
 
         private void AddDevice_Click(object sender, RoutedEventArgs e)
@@ -48,7 +51,10 @@ namespace SyncOMatic
         {
             var rdWindow = new RemoteDeviceWindow();
             EditItem(rdWindow, remoteDevicesListView, RemoteDevices);
-            Task updateTask = rdWindow.RemoteDevice.UpdateHostnameAsync();
+            if (rdWindow.RemoteDevice != null)
+            {
+                Task updateTask = rdWindow.RemoteDevice.UpdateHostnameAsync();
+            }
         }
 
         private void DeleteDevice_Click(object sender, RoutedEventArgs e)

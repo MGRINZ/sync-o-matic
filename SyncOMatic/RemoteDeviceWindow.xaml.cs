@@ -57,7 +57,7 @@ namespace SyncOMatic
 
         private void AddSyncRule_Click(object sender, RoutedEventArgs e)
         {
-            var sdWindow = new SyncDetailsWindow();
+            var sdWindow = new SyncDetailsWindow(remoteDevice.IpAddress, remoteDevice.Port);
             sdWindow.Owner = this;
             sdWindow.ShowDialog();
         }
