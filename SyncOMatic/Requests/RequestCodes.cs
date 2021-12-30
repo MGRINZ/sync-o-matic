@@ -1,8 +1,8 @@
-﻿namespace SyncOMatic
+﻿namespace SyncOMatic.Requests
 {
     public enum RequestCodes
     {
         GetSharedFolders,
-        GetFolders
+        GetSharedSubfolders
     }
 }

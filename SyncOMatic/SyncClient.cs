@@ -1,5 +1,8 @@
-﻿using System;
+﻿using SyncOMatic.Requests;
+using SyncOMatic.Responses;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -8,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SyncOMatic
 {
-    public class SyncClient
+    public class SyncClient : SyncEndpoint
     {
         private TcpClient tcpClient;
         private IPAddress ipAddress;
@@ -20,7 +23,7 @@ namespace SyncOMatic
             this.port = port;
         }
 
-        public async Task<SharedFoldersResponse> SendRequestAsync(SharedFoldersRequest request)
+        public async Task<IResponse> SendRequestAsync(IRequest request)
         {
             tcpClient = new TcpClient();
             tcpClient.Connect(ipAddress, port);
@@ -30,22 +33,52 @@ namespace SyncOMatic
             SendRequestCode(request.RequestCode);
             SendClientId("0123456789"); // for future use
 
-            SharedFoldersResponse response = new SharedFoldersResponse();
+            IResponse response = GetResponseObject(request.RequestCode);
 
-            //while
-                //request.GetData();
-                //await tcpClient.GetStream().WriteAsync();
-
-                do
+            if(request.SendsData)
+            {
+                byte[] requestBuffer;
+                while ((requestBuffer = request.GetData()).Length > 0)
                 {
-                    int length = GetReceiveDataLength();
-                    byte[] buffer = new byte[length];
-                    await tcpClient.GetStream().ReadAsync(buffer, 0, length);
-                    response.AppendData(buffer);
-                } while (tcpClient.GetStream().DataAvailable);
-            //
+                    byte[] requestLength = GetSendDataLength(requestBuffer);
+
+                    try
+                    {
+                        await tcpClient.GetStream().WriteAsync(requestLength, 0, 4);
+                        await tcpClient.GetStream().WriteAsync(requestBuffer, 0, requestBuffer.Length);
+
+                        await ReceiveData(response);
+                    }
+                    catch (IOException e)
+                    {
+                        Logger.LogInfo(e);
+                        return response;
+                    }
+                }
+            }
+            else
+                await ReceiveData(response);
 
             tcpClient.Close();
+            return response;
+        }
+
+        private IResponse GetResponseObject(RequestCodes requestCode)
+        {
+            IResponse response = null;
+            switch(requestCode)
+            {
+                case RequestCodes.GetSharedFolders:
+                {
+                    response = new SharedFoldersResponse();
+                    break;
+                }
+                case RequestCodes.GetSharedSubfolders:
+                {
+                    response = new SharedSubfoldersResponse();
+                    break;
+                }
+            }
             return response;
         }
 
@@ -63,20 +96,18 @@ namespace SyncOMatic
             tcpClient.GetStream().WriteAsync(buffer, 0, buffer.Length);
         }
 
-        private int GetReceiveDataLength()
+        private async Task ReceiveData(IResponse response)
         {
-            byte[] length = new byte[4];
-            tcpClient.GetStream().Read(length, 0, 4);
-
-            int bufferLength = 0;
-
-            bufferLength |= length[0];
-            for (int i = 1; i < 4; i++)
+            do
             {
-                bufferLength <<= 8;
-                bufferLength |= length[i];
-            }
-            return bufferLength;
+                byte[] responseLengthBytes = new byte[4];
+                tcpClient.GetStream().Read(responseLengthBytes, 0, 4);
+
+                int responseLength = GetReceiveDataLength(responseLengthBytes);
+                byte[] responseBuffer = new byte[responseLength];
+                await tcpClient.GetStream().ReadAsync(responseBuffer, 0, responseLength);
+                response.AppendData(responseBuffer);
+            } while (tcpClient.GetStream().DataAvailable);
         }
     }
 }

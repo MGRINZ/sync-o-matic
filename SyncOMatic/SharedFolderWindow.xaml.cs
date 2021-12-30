@@ -9,6 +9,8 @@ namespace SyncOMatic
     /// </summary>
     public partial class SharedFolderWindow : Window, IAddEditDelete
     {
+        public int SelectedIndex { get; set; }
+
         private SharedFolder sharedFolder;
         private bool save = false;
 
@@ -26,12 +28,36 @@ namespace SyncOMatic
         {
             InitializeComponent();
             SharedFolder = new SharedFolder();
+            SelectedIndex = -1;
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             if (!Directory.Exists(SharedFolder.Path))
                 return;
+
+            if (SharedFolder.Name.Trim().Length == 0)
+                return;
+
+            RemoteDeviceWindow rdWindow = (RemoteDeviceWindow)this.Owner;
+
+            foreach (var folder in rdWindow.RemoteDevice.SharedFolders)
+            {
+                if (SelectedIndex != -1 && rdWindow.RemoteDevice.SharedFolders.IndexOf(folder) == SelectedIndex)
+                    continue;
+
+                if (folder.Path == SharedFolder.Path)
+                {
+                    MessageBox.Show(this, "Katalog o podanej ścieżce już istnieje. Wprowadź inną ścieżkę.", "Ścieżka istnieje", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (folder.Name == SharedFolder.Name)
+                {
+                    MessageBox.Show(this, "Katalog o podanej nazwie już istnieje. Wprowadź inną nazwę.", "Folder istnieje", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+            }
 
             save = true;
 

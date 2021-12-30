@@ -83,6 +83,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+                                <GridViewColumn Header="Nazwa" DisplayMemberBinding="{Binding Name}" />
                                 <GridViewColumn Header="Ścieżka" DisplayMemberBinding="{Binding Path}" />
                                 <GridViewColumn Header="Odczyt">
                                     <GridViewColumn.CellTemplate>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SyncOMatic.Requests;
+using SyncOMatic.Responses;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,7 +13,7 @@ using System.Windows;
 
 namespace SyncOMatic
 {
-    public class SyncServer
+    public class SyncServer : SyncEndpoint
     {
         private static SyncServer instance;
         private static readonly object instaceLock = new object();
@@ -70,13 +72,18 @@ namespace SyncOMatic
                 string clientId = await GetClientId(tcpClient); // For future use
                 IPAddress clientIp = ((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address;
 
-                SharedFoldersResponse response = null;
+                IResponse response = null;
 
                 switch (requestCode)
                 {
                     case RequestCodes.GetSharedFolders:
                     {
                         response = new SharedFoldersResponse(clientIp);
+                        break;
+                    }
+                    case RequestCodes.GetSharedSubfolders:
+                    {
+                        response = new SharedSubfoldersResponse(clientIp);
                         break;
                     }
                 }
@@ -110,7 +117,25 @@ namespace SyncOMatic
             return Encoding.ASCII.GetString(buffer);
         }
 
-        private async Task SendResponseAsync(TcpClient tcpClient, SharedFoldersResponse response)
+        private async Task SendResponseAsync(TcpClient tcpClient, IResponse response)
+        {
+
+            if (tcpClient.GetStream().DataAvailable)
+            {
+                byte[] requestDataLengthBytes = new byte[4];
+                tcpClient.GetStream().Read(requestDataLengthBytes, 0, 4);
+
+                int requestDataLength = GetReceiveDataLength(requestDataLengthBytes);
+                byte[] requestData = new byte[requestDataLength];
+                await tcpClient.GetStream().ReadAsync(requestData, 0, requestDataLength);
+                response.AppendToSend(requestData);
+                await SendData(tcpClient, response);
+            }
+            else
+                await SendData(tcpClient, response);
+        }
+
+        private async Task SendData(TcpClient tcpClient, IResponse response)
         {
             byte[] buffer;
             while ((buffer = response.GetData()).Length > 0)
@@ -128,16 +153,6 @@ namespace SyncOMatic
                     return;
                 }
             }
-        }
-
-        private byte[] GetSendDataLength(byte[] data)
-        {
-            byte[] length = new byte[4];
-
-            for (int i = 0; i < 4; i++)
-                length[i] = (byte)((data.Length >> (8 * (3 - i))) & 0xff);
-
-            return length;
         }
 
         public void Restart()

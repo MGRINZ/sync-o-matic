@@ -25,6 +25,7 @@ namespace SyncOMatic
             if (listBox.SelectedItem == null)
                 return;
 
+            dialog.SelectedIndex = listBox.SelectedIndex;
             dialog.SetItem(listBox.SelectedItem);
             dialogWindow.ShowDialog();
 

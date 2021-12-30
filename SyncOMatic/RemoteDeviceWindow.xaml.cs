@@ -18,6 +18,8 @@ namespace SyncOMatic
     /// </summary>
     public partial class RemoteDeviceWindow : AddEditDeleteWindow, IAddEditDelete
     {
+        public int SelectedIndex { get; set; }
+
         private RemoteDevice remoteDevice;
         private bool save = false;
 

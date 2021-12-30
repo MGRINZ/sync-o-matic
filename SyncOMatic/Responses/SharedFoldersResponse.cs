@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Text;
-using System.Windows;
 
-namespace SyncOMatic
+namespace SyncOMatic.Responses
 {
-    public class SharedFoldersResponse
+    public class SharedFoldersResponse : IResponse
     {
         public IList<SharedFolder> SharedFolders { get; private set; }
         private IEnumerator<SharedFolder> sharedFoldersEnum;
@@ -37,16 +35,18 @@ namespace SyncOMatic
             if (sharedFoldersEnum == null)
                 return new byte[0];
 
-            while(sharedFoldersEnum.MoveNext())
+            while (sharedFoldersEnum.MoveNext())
             {
                 SharedFolder folder = sharedFoldersEnum.Current;
-                
+
                 if (!folder.IsActive)
                     continue;
 
-                data.AddRange(Encoding.UTF8.GetBytes(folder.Path));
+                data.AddRange(Encoding.UTF8.GetBytes(folder.Name));
                 data.Add(Convert.ToByte(folder.CanRead));
                 data.Add(Convert.ToByte(folder.CanWrite));
+                folder.LoadLocalSubfolders();
+                data.Add(Convert.ToByte(folder.IsEmpty));
 
                 break;
             }
@@ -58,10 +58,17 @@ namespace SyncOMatic
         {
             int length = data.Length;
             var sharedFolder = new SharedFolder();
-            sharedFolder.Path = Encoding.UTF8.GetString(data.AsSpan().Slice(0, length - 2));
-            sharedFolder.CanRead = Convert.ToBoolean(data[length - 2]);
-            sharedFolder.CanWrite = Convert.ToBoolean(data[length - 1]);
+            sharedFolder.Name = Encoding.UTF8.GetString(data.AsSpan().Slice(0, length - 3));
+            sharedFolder.Path = $"/{sharedFolder.Name}";
+            sharedFolder.CanRead = Convert.ToBoolean(data[length - 3]);
+            sharedFolder.CanWrite = Convert.ToBoolean(data[length - 2]);
+            sharedFolder.IsEmpty = Convert.ToBoolean(data[length - 1]);
             SharedFolders.Add(sharedFolder);
+        }
+
+        public void AppendToSend(byte[] data)
+        {
+            
         }
     }
 }

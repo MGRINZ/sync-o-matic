@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SyncOMatic.Requests;
+using SyncOMatic.Responses;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -37,8 +39,13 @@ namespace SyncOMatic
         private async void GetRemoteFolders(IPAddress ipAddress, short port)
         {
             var syncClient = new SyncClient(ipAddress, port);
-            SharedFoldersResponse response = await syncClient.SendRequestAsync(new SharedFoldersRequest());
+            SharedFoldersResponse response = (SharedFoldersResponse)await syncClient.SendRequestAsync(new SharedFoldersRequest());
             SharedFolders = new ObservableCollection<SharedFolder>(response.SharedFolders);
+            foreach(var folder in SharedFolders)
+            {
+                folder.IpAddress = ipAddress;
+                folder.Port = port;
+            }
         }
 
         private void Select_Click(object sender, RoutedEventArgs e)
@@ -49,6 +56,11 @@ namespace SyncOMatic
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void Folder_Expanded(object sender, RoutedEventArgs e)
+        {
+            ((e.OriginalSource as TreeViewItem).DataContext as SharedSubfolder).LoadRemoteSubfolders();
         }
     }
 }

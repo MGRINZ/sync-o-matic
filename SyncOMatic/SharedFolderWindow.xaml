@@ -22,12 +22,22 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Grid.ColumnSpan="2">Ścieżka katalogu:</Label>
             <TextBox Grid.Row="1">
                 <Binding Path="Path">
                     <Binding.ValidationRules>
                         <local1:PathValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox>
+            <Label Grid.Row="2" Grid.ColumnSpan="2">Nazwa:</Label>
+            <TextBox Grid.Row="3" Grid.ColumnSpan="2">
+                <Binding Path="Name">
+                    <Binding.ValidationRules>
+                        <local1:EmptyStringValidationRule />
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox>

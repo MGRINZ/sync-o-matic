@@ -15,12 +15,12 @@
             <Button Content="Wybierz" Click="Select_Click" />
             <Button Content="Anuluj" Click="Cancel_Click" />
         </WrapPanel>
-        <TreeView ItemsSource="{Binding SharedFolders}">
+        <TreeView ItemsSource="{Binding SharedFolders}" TreeViewItem.Expanded="Folder_Expanded">
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type local:SharedSubfolder}" ItemsSource="{Binding Subfolders}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/SyncOMatic;component/Resources/Images/folder.ico" Height="16" />
-                        <TextBlock Text="{Binding Path}" />
+                        <TextBlock Text="{Binding Name}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>

@@ -1,26 +1,14 @@
 ﻿using System;
-using System.ComponentModel;
 
 namespace SyncOMatic
 {
-    public class SharedFolder : INotifyPropertyChanged, ICloneable
+    public class SharedFolder : SharedSubfolder, ICloneable
     {
         public bool IsActive { get; set; }
-        private string path;
+        
         private bool canRead;
         private bool canWrite;
-        public string Path
-        {
-            get => path;
-            set
-            {
-                if (value != path)
-                {
-                    path = value;
-                    NotifyPropertyChanged("Path");
-                }
-            }
-        }
+
         public bool CanRead
         {
             get => canRead;
@@ -46,19 +34,11 @@ namespace SyncOMatic
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public SharedFolder()
         {
             IsActive = false;
             CanRead = true;
             CanWrite = true;
-        }
-
-        private void NotifyPropertyChanged(string propName)
-        {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
         public object Clone()
