@@ -24,7 +24,7 @@ namespace SyncOMatic.Networking
 
                 if (syncRule.SyncMethod == SyncMethod.ReadOnly || syncRule.SyncMethod == SyncMethod.ReadWrite)
                 {
-                    IResponse response = await syncClient.SendRequestAsync(new GetFilesListRequest(syncRule));
+                    FilesListResponse response = (FilesListResponse) await syncClient.SendRequestAsync(new GetFilesListRequest(syncRule));
                 }
             }
         }

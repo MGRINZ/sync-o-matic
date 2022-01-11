@@ -68,15 +68,20 @@ namespace SyncOMatic.Networking
             switch (requestCode)
             {
                 case RequestCodes.GetSharedFolders:
-                    {
-                        response = new SharedFoldersResponse();
-                        break;
-                    }
+                {
+                    response = new SharedFoldersResponse();
+                    break;
+                }
                 case RequestCodes.GetSharedSubfolders:
-                    {
-                        response = new SharedSubfoldersResponse();
-                        break;
-                    }
+                {
+                    response = new SharedSubfoldersResponse();
+                    break;
+                }
+                case RequestCodes.GetFileList:
+                {
+                    response = new FilesListResponse();
+                    break;
+                }
             }
             return response;
         }
@@ -105,7 +110,7 @@ namespace SyncOMatic.Networking
                 int responseLength = GetReceiveDataLength(responseLengthBytes);
                 byte[] responseBuffer = new byte[responseLength];
                 await tcpClient.GetStream().ReadAsync(responseBuffer, 0, responseLength);
-                response.AppendData(responseBuffer);
+                response.AppendReceivedData(responseBuffer);
             } while (tcpClient.GetStream().DataAvailable);
         }
     }

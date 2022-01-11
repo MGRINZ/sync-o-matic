@@ -29,7 +29,7 @@ namespace SyncOMatic.Networking.Responses
             }
         }
 
-        public byte[] GetData()
+        public byte[] GetDataToSend()
         {
             List<byte> data = new List<byte>();
 
@@ -55,7 +55,7 @@ namespace SyncOMatic.Networking.Responses
             return data.ToArray();
         }
 
-        public void AppendData(byte[] data)
+        public void AppendReceivedData(byte[] data)
         {
             int length = data.Length;
             var sharedFolder = new SharedFolder();
@@ -67,7 +67,7 @@ namespace SyncOMatic.Networking.Responses
             SharedFolders.Add(sharedFolder);
         }
 
-        public void AppendToSend(byte[] data)
+        public void ParseRequestData(byte[] data)
         {
 
         }

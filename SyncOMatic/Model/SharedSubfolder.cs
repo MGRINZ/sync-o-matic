@@ -2,6 +2,7 @@
 using SyncOMatic.Networking.Requests;
 using SyncOMatic.Networking.Responses;
 using SyncOMatic.Utils;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -9,44 +10,13 @@ using System.Net;
 
 namespace SyncOMatic.Model
 {
-    public class SharedSubfolder : INotifyPropertyChanged
+    public class SharedSubfolder : File
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private string name = "";
-        private string path;
-        public string Name
-        {
-            get => name;
-            set
-            {
-                if (value != name)
-                {
-                    name = value;
-                    NotifyPropertyChanged("Name");
-                }
-            }
-        }
-        public string Path
-        {
-            get => path;
-            set
-            {
-                if (value != path)
-                {
-                    path = value;
-                    NotifyPropertyChanged("Path");
-
-                    if (name.Length == 0)
-                        Name = System.IO.Path.GetFileName(path);
-                }
-            }
-        }
-        public SharedSubfolder Parent { get; private set; }
         public IPAddress IpAddress { get; set; }
         public short Port { get; set; }
 
         public ObservableCollection<SharedSubfolder> Subfolders { get; private set; }
+        public List<File> Files { get; private set; }
         private bool isEmpty;
         private bool remoteSubfoldersLoaded;
 
@@ -71,26 +41,42 @@ namespace SyncOMatic.Model
             }
         }
 
-        public SharedSubfolder()
+        public bool LoadFiles()
+        {
+            if (Files == null)
+                Files = new List<File>();
+
+            Files.Clear();
+
+            try
+            {
+                string[] files= Directory.GetFiles(Path);
+
+                foreach (var file in files)
+                    Files.Add(new File(file, this));
+
+                return true;
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                Logger.LogError(e);
+                return false;
+            }
+        }
+
+        public SharedSubfolder() : this(null, null) { }
+
+        private SharedSubfolder(string path, SharedSubfolder parent) : base(path, parent)
         {
             Subfolders = new ObservableCollection<SharedSubfolder>();
             IsEmpty = true;
             remoteSubfoldersLoaded = false;
-        }
 
-        private SharedSubfolder(string path, SharedSubfolder parent) : this()
-        {
-            Path = path;
-            Name = System.IO.Path.GetFileName(path);
-            Parent = parent;
-            IpAddress = Parent.IpAddress;
-            Port = Parent.Port;
-        }
-
-        protected void NotifyPropertyChanged(string propName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propName));
+            if(Parent != null)
+            {
+                IpAddress = Parent.IpAddress;
+                Port = Parent.Port;
+            }
         }
 
         public bool LoadLocalSubfolders()
@@ -125,7 +111,7 @@ namespace SyncOMatic.Model
                 return;
 
             var syncClient = new SyncClient(IpAddress, Port);
-            SharedSubfoldersResponse response = (SharedSubfoldersResponse)await syncClient.SendRequestAsync(new SharedSubfoldersRequest(path));
+            SharedSubfoldersResponse response = (SharedSubfoldersResponse)await syncClient.SendRequestAsync(new SharedSubfoldersRequest(Path));
 
             Subfolders.Clear();
             foreach (var subfolder in response.Subfolders)

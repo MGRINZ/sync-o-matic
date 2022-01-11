@@ -32,12 +32,9 @@ namespace SyncOMatic.Networking.Responses
             }
         }
 
-        public void AppendToSend(byte[] data)
+        public void ParseRequestData(byte[] data)
         {
             remotePath = Encoding.UTF8.GetString(data);
-
-            // /Name/
-            // /C/Program Files/Internet Explorer
 
             string[] remotePathTree = remotePath.Split("/");
             string remoteRoot = remotePathTree[1];  // index 0 is empty
@@ -57,7 +54,7 @@ namespace SyncOMatic.Networking.Responses
             }
         }
 
-        public byte[] GetData()
+        public byte[] GetDataToSend()
         {
             List<byte> data = new List<byte>();
 
@@ -82,7 +79,7 @@ namespace SyncOMatic.Networking.Responses
             return data.ToArray();
         }
 
-        public void AppendData(byte[] data)
+        public void AppendReceivedData(byte[] data)
         {
             int length = data.Length;
             if (length <= 0 || length == 1 && data[0] == IResponse.NO_DATA_BYTE)

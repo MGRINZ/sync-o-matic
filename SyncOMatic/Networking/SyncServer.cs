@@ -74,20 +74,20 @@ namespace SyncOMatic.Networking
                 switch (requestCode)
                 {
                     case RequestCodes.GetSharedFolders:
-                        {
-                            response = new SharedFoldersResponse(clientIp);
-                            break;
-                        }
+                    {
+                        response = new SharedFoldersResponse(clientIp);
+                        break;
+                    }
                     case RequestCodes.GetSharedSubfolders:
-                        {
-                            response = new SharedSubfoldersResponse(clientIp);
-                            break;
-                        }
+                    {
+                        response = new SharedSubfoldersResponse(clientIp);
+                        break;
+                    }
                     case RequestCodes.GetFileList:
-                        {
-
-                            break;
-                        }
+                    {
+                        response = new FilesListResponse(clientIp);
+                        break;
+                    }
                 }
 
                 if (response != null)
@@ -130,7 +130,7 @@ namespace SyncOMatic.Networking
                 int requestDataLength = GetReceiveDataLength(requestDataLengthBytes);
                 byte[] requestData = new byte[requestDataLength];
                 await tcpClient.GetStream().ReadAsync(requestData, 0, requestDataLength);
-                response.AppendToSend(requestData);
+                response.ParseRequestData(requestData);
                 await SendData(tcpClient, response);
             }
             else
@@ -140,7 +140,7 @@ namespace SyncOMatic.Networking
         private async Task SendData(TcpClient tcpClient, IResponse response)
         {
             byte[] buffer;
-            while ((buffer = response.GetData()).Length > 0)
+            while ((buffer = response.GetDataToSend()).Length > 0)
             {
                 byte[] length = GetSendDataLength(buffer);
 
