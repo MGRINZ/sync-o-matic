@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SyncOMatic.Model;
+using SyncOMatic.Networking;
+using SyncOMatic.View;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
