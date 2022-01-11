@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SyncOMatic"
-        mc:Ignorable="d"
+        xmlns:local="clr-namespace:SyncOMatic" xmlns:local1="clr-namespace:SyncOMatic.Converters"
+                           mc:Ignorable="d"
         Title="Sync-O-Matic"
         Height="550" Width="800" MinHeight="550" MinWidth="800"
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" >
@@ -70,11 +70,7 @@
                                 <GridViewColumn Header="Nazwa hosta" DisplayMemberBinding="{Binding Hostname}" />
                                 <GridViewColumn Header="Adres IP">
                                     <GridViewColumn.DisplayMemberBinding>
-                                        <Binding Path="IpAddress">
-                                            <Binding.Converter>
-                                                <local:IPAddressStringConverter />
-                                            </Binding.Converter>
-                                        </Binding>
+                                        <Binding Path="IpAddress" Converter="{StaticResource IPAddressStringConverter}"/>
                                     </GridViewColumn.DisplayMemberBinding>
                                 </GridViewColumn>
                                 <GridViewColumn Header="Port" DisplayMemberBinding="{Binding Port}" />
@@ -111,7 +107,7 @@
                         <Label Grid.Row="5">Ostatnia synchronizacja:</Label>
                         <Label Grid.Column="1" Grid.Row="5">{Ostatnia synchronizacja}</Label>
                     </Grid>
-                    <Button Content="Synchronizuj" HorizontalAlignment="Center" Width="100" Margin="10"/>
+                    <Button Content="Synchronizuj" HorizontalAlignment="Center" Width="100" Margin="10" Click="Sync_Click"/>
                 </StackPanel>
             </Grid>
         </GroupBox>

@@ -8,7 +8,8 @@
         Title="Ustawienia synchronizacji" Height="450" Width="450"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
-        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+        Closing="Window_Closing">
     <DockPanel Margin="5">
         <Grid DockPanel.Dock="Top">
             <Grid.Resources>
@@ -28,17 +29,23 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Grid.ColumnSpan="2">Katalog lokalny:</Label>
-            <TextBox Grid.Row="1" />
-            <Button Grid.Row="1" Grid.Column="1" Margin="10,0,0,0">Wybierz...</Button>
+            <TextBox Grid.Row="1">
+                <Binding Path="LocalDir">
+                    <Binding.ValidationRules>
+                        <StaticResource ResourceKey="PathValidationRule" />
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox>
+            <Button Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" Click="SelectLocalDir_Click">Wybierz...</Button>
             <Label Grid.Row="2" Grid.ColumnSpan="2">Katalog zdalny:</Label>
-            <TextBox Grid.Row="3" />
+            <TextBox Grid.Row="3" Text="{Binding RemoteDir}" IsEnabled="False" />
             <Button Grid.Row="3" Grid.Column="1" Margin="10,0,0,0" Click="SelectRemoteDir_Click" >Wybierz...</Button>
             <WrapPanel Grid.Row="4" Grid.ColumnSpan="2" Margin="0,5">
                 <Label Padding="5,0" VerticalAlignment="Center">Kierunek synchronizacji:</Label>
-                <ComboBox Name="syncDirection" Grid.Row="4" Grid.Column="1">
-                    <ComboBoxItem IsSelected="True">Wyślij i pobierz</ComboBoxItem>
-                    <ComboBoxItem>Tylko pobierz</ComboBoxItem>
-                    <ComboBoxItem>Tylko wyślij</ComboBoxItem>
+                <ComboBox Name="syncDirection" Grid.Row="4" Grid.Column="1" Width="150" ItemsSource="{StaticResource SyncMethods}">
+                    <ComboBox.SelectedIndex>
+                        <Binding Path="SyncMethod" Converter="{StaticResource EnumConverter}" ConverterParameter="{x:Type local:SyncMethod}" />
+                    </ComboBox.SelectedIndex>
                 </ComboBox>
             </WrapPanel>
                 
@@ -47,7 +54,7 @@
             <WrapPanel.Resources>
                 <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
             </WrapPanel.Resources>
-            <Button Content="Zapisz" />
+            <Button Content="Zapisz" Click="Save_Click" />
             <Button Content="Anuluj" Click="Cancel_Click" />
         </WrapPanel>
         <GroupBox Header="Wykluczenia">

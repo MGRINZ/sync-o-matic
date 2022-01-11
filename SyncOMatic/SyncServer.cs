@@ -86,6 +86,11 @@ namespace SyncOMatic
                         response = new SharedSubfoldersResponse(clientIp);
                         break;
                     }
+                    case RequestCodes.GetFileList:
+                    {
+                        
+                        break;
+                    }
                 }
 
                 if(response != null)

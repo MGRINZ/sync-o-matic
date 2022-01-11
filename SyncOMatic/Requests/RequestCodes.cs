@@ -3,6 +3,7 @@
     public enum RequestCodes
     {
         GetSharedFolders,
-        GetSharedSubfolders
+        GetSharedSubfolders,
+        GetFileList
     }
 }

@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SyncOMatic"
-        xmlns:local1="clr-namespace:SyncOMatic.ValidationRules"
-        mc:Ignorable="d"
+        xmlns:local1="clr-namespace:SyncOMatic.ValidationRules" xmlns:converters="clr-namespace:SyncOMatic.Converters"
+                           mc:Ignorable="d"
         Title="Dodaj urządzenie zdalne" Height="500" Width="500" MinHeight="500" MinWidth="500"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
@@ -34,10 +34,7 @@
             <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding Name}" />
             <Label Grid.Row="1">Adres IP:</Label>
                 <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
-                    <Binding Path="IpAddress">
-                        <Binding.Converter>
-                            <local:IPAddressStringConverter />
-                        </Binding.Converter>
+                    <Binding Path="IpAddress" Converter="{StaticResource IPAddressStringConverter}">
                         <Binding.ValidationRules>
                             <local1:IPAddressValidationRule />
                         </Binding.ValidationRules>
@@ -111,26 +108,33 @@
                             <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
                         </WrapPanel.Resources>
                         <Button Content="Dodaj" Click="AddSyncRule_Click" />
-                        <Button Content="Zmień" />
+                        <Button Content="Zmień" Click="EditSyncRule_Click"/>
                         <Button Content="Usuń" />
                     </WrapPanel>
-                    <ListView>
+                    <ListView Name="syncRulesListView" ItemsSource="{Binding SyncRules}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox />
+                                            <CheckBox IsChecked="{Binding IsActive}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Katalog lokalny" />
-                                <GridViewColumn Header="Katalog zdalny" />
-                                <GridViewColumn Header="Kierunek" />
-                                <GridViewColumn Header="Wykluczenia" />
+                                <GridViewColumn Header="Katalog lokalny" DisplayMemberBinding="{Binding LocalDir}" />
+                                <GridViewColumn Header="Katalog zdalny" DisplayMemberBinding="{Binding RemoteDir}" />
+                                <GridViewColumn Header="Kierunek">
+                                    <GridViewColumn.DisplayMemberBinding>
+                                        <Binding Path="SyncMethod" Mode="OneWay" ConverterParameter="{StaticResource SyncMethods}">
+                                            <Binding.Converter>
+                                                <converters:SyncMethodToStringConverter />
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </GridViewColumn.DisplayMemberBinding>
+                                </GridViewColumn>
+                                <!--<GridViewColumn Header="Wykluczenia" />-->
                             </GridView>
                         </ListView.View>
-                        <ListViewItem></ListViewItem>
                     </ListView>
                 </DockPanel>
             </GroupBox>

@@ -30,7 +30,7 @@ namespace SyncOMatic
         public short Port { get; set; }
         public DateTime LastSync { get; set; }
         public ObservableCollection<SharedFolder> SharedFolders { get; private set; }
-        public ObservableCollection<SyncRule> SyncRules{ get; private set; }
+        public ObservableCollection<SyncRule> SyncRules { get; private set; }
 
         public RemoteDevice()
         {

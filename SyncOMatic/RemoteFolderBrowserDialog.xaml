@@ -15,7 +15,7 @@
             <Button Content="Wybierz" Click="Select_Click" />
             <Button Content="Anuluj" Click="Cancel_Click" />
         </WrapPanel>
-        <TreeView ItemsSource="{Binding SharedFolders}" TreeViewItem.Expanded="Folder_Expanded">
+        <TreeView Name="remoteFoldersTree"  ItemsSource="{Binding SharedFolders}" TreeViewItem.Expanded="Folder_Expanded">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type local:SharedSubfolder}" ItemsSource="{Binding Subfolders}">
                     <StackPanel Orientation="Horizontal">

@@ -91,19 +91,30 @@ namespace SyncOMatic
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
-        public void LoadLocalSubfolders()
+        public bool LoadLocalSubfolders()
         {
             if (Subfolders == null)
                 Subfolders = new ObservableCollection<SharedSubfolder>();
 
             Subfolders.Clear();
 
-            string[] paths = Directory.GetDirectories(Path);
-            foreach (var path in paths)
-                Subfolders.Add(new SharedSubfolder(path, this));
+            try
+            {
+                string[] paths = Directory.GetDirectories(Path);
 
-            if (Subfolders.Count > 0)
-                IsEmpty = false;
+                foreach (var path in paths)
+                    Subfolders.Add(new SharedSubfolder(path, this));
+
+                if (Subfolders.Count > 0)
+                    IsEmpty = false;
+
+                return true;
+            }
+            catch(DirectoryNotFoundException e)
+            {
+                Logger.LogError(e);
+                return false;
+            }
         }
 
         public async void LoadRemoteSubfolders()

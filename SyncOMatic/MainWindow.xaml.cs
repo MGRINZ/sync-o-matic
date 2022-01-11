@@ -74,5 +74,14 @@ namespace SyncOMatic
         {
             Close();
         }
+
+        private void Sync_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var device in RemoteDevices)
+            {
+                var syncTask = new SyncTask(device);
+                syncTask.run();
+            }
+        }
     }
 }

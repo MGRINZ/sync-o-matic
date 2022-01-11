@@ -67,9 +67,13 @@ namespace SyncOMatic.Responses
             {
                 SharedSubfolder folder = subfoldersEnum.Current;
 
-                data.AddRange(Encoding.UTF8.GetBytes($"{remotePath}/{folder.Name}"));
-                folder.LoadLocalSubfolders();
-                data.Add(Convert.ToByte(folder.IsEmpty));
+                if (folder.LoadLocalSubfolders())
+                {
+                    data.AddRange(Encoding.UTF8.GetBytes($"{remotePath}/{folder.Name}"));
+                    data.Add(Convert.ToByte(folder.IsEmpty));
+                }
+                else
+                    data.Add(IResponse.NO_DATA_BYTE);
 
                 break;
             }
@@ -80,6 +84,8 @@ namespace SyncOMatic.Responses
         public void AppendData(byte[] data)
         {
             int length = data.Length;
+            if (length <= 0 || (length == 1 && data[0] == IResponse.NO_DATA_BYTE))
+                return;
             var sharedSubfolder = new SharedSubfolder();
             sharedSubfolder.Path = Encoding.UTF8.GetString(data.AsSpan().Slice(0, length - 1));
             sharedSubfolder.IsEmpty = Convert.ToBoolean(data[length - 1]);

@@ -50,7 +50,14 @@ namespace SyncOMatic
 
         private void Select_Click(object sender, RoutedEventArgs e)
         {
+            var remoteFolder = (SharedSubfolder)remoteFoldersTree.SelectedItem;
 
+            if (remoteFolder == null)
+                return;
+
+            (Owner as SyncDetailsWindow).SyncRule.RemoteDir = remoteFolder.Path;
+
+            Close();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

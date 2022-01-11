@@ -29,7 +29,7 @@
             <TextBox Grid.Row="1">
                 <Binding Path="Path">
                     <Binding.ValidationRules>
-                        <local1:PathValidationRule />
+                        <StaticResource ResourceKey="PathValidationRule" />
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox>

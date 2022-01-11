@@ -1,21 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Net;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace SyncOMatic
+namespace SyncOMatic.Converters
 {
-    [ValueConversion(typeof(IPAddress), typeof(string))]
-    public class IPAddressStringConverter : IValueConverter
+    public class EnumConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return ((IPAddress)value).ToString();
+            return System.Convert.ToInt32(value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return IPAddress.Parse((string)value);
+            return Enum.Parse((Type)parameter, value.ToString());
         }
     }
 }

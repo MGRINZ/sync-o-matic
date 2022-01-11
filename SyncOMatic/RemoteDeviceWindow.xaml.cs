@@ -60,8 +60,14 @@ namespace SyncOMatic
         private void AddSyncRule_Click(object sender, RoutedEventArgs e)
         {
             var sdWindow = new SyncDetailsWindow(remoteDevice.IpAddress, remoteDevice.Port);
-            sdWindow.Owner = this;
-            sdWindow.ShowDialog();
+            AddItem(sdWindow, RemoteDevice.SyncRules);
+        }
+
+        private void EditSyncRule_Click(object sender, RoutedEventArgs e)
+        {
+            var sdWindow = new SyncDetailsWindow(remoteDevice.IpAddress, remoteDevice.Port);
+            sdWindow.Title = "Edytuj regułę synchronizacji";
+            EditItem(sdWindow, syncRulesListView, RemoteDevice.SyncRules);
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
