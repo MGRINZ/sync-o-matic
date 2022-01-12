@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SyncOMatic.Model
+namespace SyncOMatic.Model.FileSystem
 {
     public class SharedFolder : SharedSubfolder, ICloneable
     {

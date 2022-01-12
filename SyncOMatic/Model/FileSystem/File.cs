@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SyncOMatic.Model
+namespace SyncOMatic.Model.FileSystem
 {
     public class File : INotifyPropertyChanged
     {
 
-        private string name = "";
+        protected string name = "";
         private string path;
         public string Name
         {
@@ -19,7 +19,7 @@ namespace SyncOMatic.Model
             {
                 if (value != name)
                 {
-                    name = (value != null) ? value : "";
+                    name = value != null ? value : "";
                     NotifyPropertyChanged("Name");
                 }
             }
@@ -58,8 +58,8 @@ namespace SyncOMatic.Model
             Path = fullPath;
             Name = System.IO.Path.GetFileName(fullPath);
             Parent = parent;
-    
-            if(Path != null)
+
+            if (Path != null)
                 ModifyTime = System.IO.File.GetLastWriteTime(Path);
         }
     }

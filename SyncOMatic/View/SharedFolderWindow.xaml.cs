@@ -1,4 +1,4 @@
-﻿using SyncOMatic.Model;
+﻿using SyncOMatic.Model.FileSystem;
 using SyncOMatic.View;
 using System.ComponentModel;
 using System.IO;

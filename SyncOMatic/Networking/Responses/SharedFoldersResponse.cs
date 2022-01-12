@@ -1,4 +1,4 @@
-﻿using SyncOMatic.Model;
+﻿using SyncOMatic.Model.FileSystem;
 using System;
 using System.Collections.Generic;
 using System.Net;

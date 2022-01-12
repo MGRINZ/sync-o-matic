@@ -1,4 +1,4 @@
-﻿using SyncOMatic.Model;
+﻿using SyncOMatic.Model.FileSystem;
 using SyncOMatic.Networking;
 using SyncOMatic.Networking.Requests;
 using SyncOMatic.Networking.Responses;

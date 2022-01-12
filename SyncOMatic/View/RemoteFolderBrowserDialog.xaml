@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SyncOMatic"
-        xmlns:model="clr-namespace:SyncOMatic.Model"
+        xmlns:model="clr-namespace:SyncOMatic.Model.FileSystem"
         mc:Ignorable="d"
         Title="RemoteFolderBrowserDialog" MinHeight="450" MinWidth="450" Width="450" Height="450"
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" >

@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Net;
 
-namespace SyncOMatic.Model
+namespace SyncOMatic.Model.FileSystem
 {
     public class SharedSubfolder : File
     {
@@ -50,7 +50,7 @@ namespace SyncOMatic.Model
 
             try
             {
-                string[] files= Directory.GetFiles(Path);
+                string[] files = Directory.GetFiles(Path);
 
                 foreach (var file in files)
                     Files.Add(new File(file, this));
@@ -72,7 +72,7 @@ namespace SyncOMatic.Model
             IsEmpty = true;
             remoteSubfoldersLoaded = false;
 
-            if(Parent != null)
+            if (Parent != null)
             {
                 IpAddress = Parent.IpAddress;
                 Port = Parent.Port;

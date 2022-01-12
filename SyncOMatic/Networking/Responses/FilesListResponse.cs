@@ -1,4 +1,4 @@
-﻿using SyncOMatic.Model;
+﻿using SyncOMatic.Model.FileSystem;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,20 +6,24 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using File = SyncOMatic.Model.FileSystem.File;
 
 namespace SyncOMatic.Networking.Responses
 {
     public class FilesListResponse : IResponse
     {
         public IList<SharedFolder> sharedFolders;
-        private SharedSubfolder sharedSubfolder;
-        private IList<Model.File> RemoteFiles;
-        private IEnumerator<Model.File> remoteFilesEnum;
+        private SharedSubfolder localSubfolder;
+
+        public IList<File> RemoteFiles { get; private set; }
+
+        private IList<File> localFiles;
+        private IEnumerator<File> localFilesEnum;
         private string remotePath;
 
         public FilesListResponse()
         {
-            RemoteFiles = new List<Model.File>();
+            RemoteFiles = new List<File>();
         }
 
         public FilesListResponse(IPAddress clientIp)
@@ -46,19 +50,19 @@ namespace SyncOMatic.Networking.Responses
                 if (folder.Name == remoteRoot)
                 {
                     string localPath = Path.Combine(folder.Path, relativePath);
-                    sharedSubfolder = new SharedSubfolder();
-                    sharedSubfolder.Path = localPath;
+                    localSubfolder = new SharedSubfolder();
+                    localSubfolder.Path = localPath;
 
-                    RemoteFiles = LoadFiles(sharedSubfolder);
-                    remoteFilesEnum = RemoteFiles.GetEnumerator();
+                    localFiles = LoadFiles(localSubfolder);
+                    localFilesEnum = localFiles.GetEnumerator();
                     break;
                 }
             }
         }
 
-        public List<Model.File> LoadFiles(SharedSubfolder folder)
+        public List<File> LoadFiles(SharedSubfolder folder)
         {
-            List<Model.File> files = new List<Model.File>();
+            List<File> files = new List<File>();
             
             folder.LoadFiles();
             files.AddRange(folder.Files);
@@ -74,18 +78,18 @@ namespace SyncOMatic.Networking.Responses
         {
             List<byte> data = new List<byte>();
 
-            if (remoteFilesEnum == null)
+            if (localFilesEnum == null)
                 return new byte[0];
 
-            if (remoteFilesEnum.MoveNext())
+            if (localFilesEnum.MoveNext())
             {
-                Model.File file = remoteFilesEnum.Current;
+                File file = localFilesEnum.Current;
 
-                string[] subfolderPathTree = sharedSubfolder.Path.Split("\\");
+                string[] subfolderPathTree = localSubfolder.Path.Split("\\");
                 IEnumerable<string> relativeFilePathTree = file.Path.Split("\\").Skip(subfolderPathTree.Length);
                 string relativeFilePath = string.Join("/", relativeFilePathTree);
 
-                data.AddRange(Encoding.UTF8.GetBytes($"{relativeFilePath}"));
+                data.AddRange(Encoding.UTF8.GetBytes($"{remotePath}/{relativeFilePath}"));
                 data.AddRange(BitConverter.GetBytes(file.ModifyTime.Ticks));
             }
 
@@ -93,7 +97,7 @@ namespace SyncOMatic.Networking.Responses
         }
         public void AppendReceivedData(byte[] data)
         {
-            Model.File file = new Model.File();
+            File file = new File();
             file.Path = Encoding.UTF8.GetString(data.AsSpan().Slice(0, data.Length - 8));
             file.ModifyTime = new DateTime(BitConverter.ToInt64(data.AsSpan().Slice(data.Length - 8, 8)));
             RemoteFiles.Add(file);
