@@ -37,7 +37,7 @@ namespace SyncOMatic.Networking
             if (request.SendsData)
             {
                 byte[] requestBuffer;
-                while ((requestBuffer = request.GetData()).Length > 0)
+                while ((requestBuffer = request.GetDataToSend()).Length > 0)
                 {
                     byte[] requestLength = GetSendDataLength(requestBuffer);
 
@@ -57,6 +57,8 @@ namespace SyncOMatic.Networking
             }
             else
                 await ReceiveData(response);
+
+            response.OnReceiveDataEnd();
 
             tcpClient.Close();
             return response;
@@ -79,7 +81,12 @@ namespace SyncOMatic.Networking
                 }
                 case RequestCodes.GetFileList:
                 {
-                    response = new FilesListResponse();
+                    response = new GetFilesListResponse();
+                    break;
+                }
+                case RequestCodes.GetFile:
+                {
+                    response = new GetFileResponse(ipAddress);
                     break;
                 }
             }

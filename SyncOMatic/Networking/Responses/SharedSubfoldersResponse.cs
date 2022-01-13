@@ -89,5 +89,7 @@ namespace SyncOMatic.Networking.Responses
             sharedSubfolder.IsEmpty = Convert.ToBoolean(data[length - 1]);
             Subfolders.Add(sharedSubfolder);
         }
+
+        public void OnReceiveDataEnd() { }
     }
 }

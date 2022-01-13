@@ -10,7 +10,7 @@ using File = SyncOMatic.Model.FileSystem.File;
 
 namespace SyncOMatic.Networking.Responses
 {
-    public class FilesListResponse : IResponse
+    public class GetFilesListResponse : IResponse
     {
         public IList<SharedFolder> sharedFolders;
         private SharedSubfolder localSubfolder;
@@ -21,12 +21,12 @@ namespace SyncOMatic.Networking.Responses
         private IEnumerator<File> localFilesEnum;
         private string remotePath;
 
-        public FilesListResponse()
+        public GetFilesListResponse()
         {
             RemoteFiles = new List<File>();
         }
 
-        public FilesListResponse(IPAddress clientIp)
+        public GetFilesListResponse(IPAddress clientIp)
         {
             foreach (var device in App.RemoteDevices)
             {
@@ -47,7 +47,7 @@ namespace SyncOMatic.Networking.Responses
             string relativePath = Path.Combine(remotePathTree.Skip(2).ToArray());
             foreach (var folder in sharedFolders)
             {
-                if (folder.Name == remoteRoot)
+                if (folder.Name == remoteRoot && folder.CanRead)
                 {
                     string localPath = Path.Combine(folder.Path, relativePath);
                     localSubfolder = new SharedSubfolder();
@@ -102,5 +102,7 @@ namespace SyncOMatic.Networking.Responses
             file.ModifyTime = new DateTime(BitConverter.ToInt64(data.AsSpan().Slice(data.Length - 8, 8)));
             RemoteFiles.Add(file);
         }
+
+        public void OnReceiveDataEnd() { }
     }
 }

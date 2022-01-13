@@ -8,6 +8,9 @@ namespace SyncOMatic.Networking.Requests
         private SyncRule syncRule;
         private bool moreData = true;
 
+        public RequestCodes RequestCode { get; private set; }
+        public bool SendsData { get; private set; }
+
         public GetFilesListRequest(SyncRule syncRule)
         {
             this.syncRule = syncRule;
@@ -15,11 +18,7 @@ namespace SyncOMatic.Networking.Requests
             SendsData = true;
         }
 
-        public RequestCodes RequestCode { get; private set; }
-
-        public bool SendsData { get; private set; }
-
-        public byte[] GetData()
+        public byte[] GetDataToSend()
         {
             byte[] data = new byte[0];
 

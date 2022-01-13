@@ -19,7 +19,7 @@ namespace SyncOMatic.Networking
 
         public async void run()
         {
-            var syncClient = new SyncClient(device.IpAddress, device.Port);
+            SyncClient syncClient = new SyncClient(device.IpAddress, device.Port);
 
             foreach (var syncRule in device.SyncRules)
             {
@@ -28,7 +28,7 @@ namespace SyncOMatic.Networking
 
                 if (syncRule.SyncMethod == SyncMethod.ReadOnly || syncRule.SyncMethod == SyncMethod.ReadWrite)
                 {
-                    FilesListResponse response = (FilesListResponse) await syncClient.SendRequestAsync(new GetFilesListRequest(syncRule));
+                    GetFilesListResponse response = (GetFilesListResponse) await syncClient.SendRequestAsync(new GetFilesListRequest(syncRule));
                     compareFiles(syncRule, response.RemoteFiles);
                 }
             }
@@ -52,9 +52,10 @@ namespace SyncOMatic.Networking
             }
         }
 
-        private void requestFile(File remoteFile)
+        private async void requestFile(File remoteFile)
         {
-            
+            SyncClient syncClient = new SyncClient(device.IpAddress, device.Port);
+            GetFileResponse response = (GetFileResponse)await syncClient.SendRequestAsync(new GetFileRequest(remoteFile));
         }
     }
 }

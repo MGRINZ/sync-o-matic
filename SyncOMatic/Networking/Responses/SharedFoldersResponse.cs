@@ -67,9 +67,8 @@ namespace SyncOMatic.Networking.Responses
             SharedFolders.Add(sharedFolder);
         }
 
-        public void ParseRequestData(byte[] data)
-        {
+        public void ParseRequestData(byte[] data) { }
 
-        }
+        public void OnReceiveDataEnd() { }
     }
 }

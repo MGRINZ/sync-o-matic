@@ -4,6 +4,6 @@
     {
         public RequestCodes RequestCode { get; }
         public bool SendsData { get; }
-        public abstract byte[] GetData();
+        public abstract byte[] GetDataToSend();
     }
 }

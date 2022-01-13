@@ -85,7 +85,12 @@ namespace SyncOMatic.Networking
                     }
                     case RequestCodes.GetFileList:
                     {
-                        response = new FilesListResponse(clientIp);
+                        response = new GetFilesListResponse(clientIp);
+                        break;
+                    }
+                    case RequestCodes.GetFile:
+                    {
+                        response = new GetFileResponse(clientIp);
                         break;
                     }
                 }

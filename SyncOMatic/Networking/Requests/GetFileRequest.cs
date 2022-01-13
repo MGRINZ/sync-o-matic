@@ -1,20 +1,21 @@
-﻿using System.Text;
+﻿using SyncOMatic.Model.FileSystem;
+using System.Text;
 
 namespace SyncOMatic.Networking.Requests
 {
-    public class SharedSubfoldersRequest : IRequest
+    public class GetFileRequest : IRequest
     {
-        private string path;
+        private File remoteFile;
         private bool moreData = true;
 
         public RequestCodes RequestCode { get; private set; }
         public bool SendsData { get; private set; }
 
-        public SharedSubfoldersRequest(string path)
+        public GetFileRequest(File remoteFile)
         {
-            RequestCode = RequestCodes.GetSharedSubfolders;
+            this.remoteFile = remoteFile;
+            RequestCode = RequestCodes.GetFile;
             SendsData = true;
-            this.path = path;
         }
 
         public byte[] GetDataToSend()
@@ -22,7 +23,7 @@ namespace SyncOMatic.Networking.Requests
             byte[] data = new byte[0];
 
             if (moreData)
-                data = Encoding.UTF8.GetBytes(path);
+                data = Encoding.UTF8.GetBytes(remoteFile.Path);
 
             moreData = false;
 

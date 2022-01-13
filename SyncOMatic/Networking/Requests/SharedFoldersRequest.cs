@@ -11,7 +11,7 @@
             SendsData = false;
         }
 
-        public byte[] GetData()
+        public byte[] GetDataToSend()
         {
             return new byte[0];
         }
