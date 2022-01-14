@@ -100,9 +100,10 @@ namespace SyncOMatic.Networking
 
                 tcpClient.Close();
             }
-            catch
+            catch(Exception e)
             {
                 tcpClient.Close();
+                Logger.LogError(e);
                 return;
             }
         }
@@ -140,6 +141,8 @@ namespace SyncOMatic.Networking
             }
             else
                 await SendData(tcpClient, response);
+
+            response.OnDataEnd();
         }
 
         private async Task SendData(TcpClient tcpClient, IResponse response)

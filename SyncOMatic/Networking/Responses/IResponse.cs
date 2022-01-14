@@ -7,6 +7,6 @@
         public byte[] GetDataToSend();
         public void AppendReceivedData(byte[] data);
         public void ParseRequestData(byte[] data);
-        public void OnReceiveDataEnd();
+        public void OnDataEnd();
     }
 }

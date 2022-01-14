@@ -103,6 +103,6 @@ namespace SyncOMatic.Networking.Responses
             RemoteFiles.Add(file);
         }
 
-        public void OnReceiveDataEnd() { }
+        public void OnDataEnd() { }
     }
 }

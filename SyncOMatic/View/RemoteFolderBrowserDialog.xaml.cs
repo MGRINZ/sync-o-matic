@@ -19,7 +19,6 @@ namespace SyncOMatic.View
         public RemoteFolderBrowserDialog()
         {
             InitializeComponent();
-            this.DataContext = this;
         }
 
         public RemoteFolderBrowserDialog(IPAddress ipAddress, short port) : this()
@@ -32,7 +31,10 @@ namespace SyncOMatic.View
             var syncClient = new SyncClient(ipAddress, port);
             SharedFoldersResponse response = (SharedFoldersResponse)await syncClient.SendRequestAsync(new SharedFoldersRequest());
             SharedFolders = new ObservableCollection<SharedFolder>(response.SharedFolders);
-            foreach(var folder in SharedFolders)
+
+            this.DataContext = this;
+
+            foreach (var folder in SharedFolders)
             {
                 folder.IpAddress = ipAddress;
                 folder.Port = port;

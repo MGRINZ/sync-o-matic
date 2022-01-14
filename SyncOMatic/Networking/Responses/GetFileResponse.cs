@@ -104,7 +104,7 @@ namespace SyncOMatic.Networking.Responses
             }
         }
 
-        public void OnReceiveDataEnd()
+        public void OnDataEnd()
         {
             if(fileStream != null)
                 fileStream.Close();

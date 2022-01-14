@@ -65,10 +65,11 @@ namespace SyncOMatic.Networking.Responses
             sharedFolder.CanWrite = Convert.ToBoolean(data[length - 2]);
             sharedFolder.IsEmpty = Convert.ToBoolean(data[length - 1]);
             SharedFolders.Add(sharedFolder);
+            
         }
 
         public void ParseRequestData(byte[] data) { }
 
-        public void OnReceiveDataEnd() { }
+        public void OnDataEnd() { }
     }
 }

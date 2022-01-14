@@ -90,6 +90,6 @@ namespace SyncOMatic.Networking.Responses
             Subfolders.Add(sharedSubfolder);
         }
 
-        public void OnReceiveDataEnd() { }
+        public void OnDataEnd() { }
     }
 }

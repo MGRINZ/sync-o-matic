@@ -58,7 +58,7 @@ namespace SyncOMatic.Networking
             else
                 await ReceiveData(response);
 
-            response.OnReceiveDataEnd();
+            response.OnDataEnd();
 
             tcpClient.Close();
             return response;
