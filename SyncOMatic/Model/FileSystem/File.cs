@@ -58,8 +58,9 @@ namespace SyncOMatic.Model.FileSystem
             Path = fullPath;
             Name = System.IO.Path.GetFileName(fullPath);
             Parent = parent;
+            ModifyTime = DateTime.MinValue;
 
-            if (Path != null)
+            if (Path != null && System.IO.File.Exists(Path))
                 ModifyTime = System.IO.File.GetLastWriteTime(Path);
         }
     }

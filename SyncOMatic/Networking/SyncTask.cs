@@ -2,61 +2,53 @@
 using SyncOMatic.Model.FileSystem;
 using SyncOMatic.Networking.Requests;
 using SyncOMatic.Networking.Responses;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
+using System.Threading.Tasks;
 
 namespace SyncOMatic.Networking
 {
     public class SyncTask
     {
-        private RemoteDevice device;
+        public RemoteDevice RemoteDevice { get; private set; }
+        public SyncRule SyncRule { get; private set; }
+        public List<LocalRemoteFilesPair> Files { get; private set; }
+        public bool SyncInProgress { get; private set; }
 
-        public SyncTask(RemoteDevice device)
+        public SyncTask(RemoteDevice device, SyncRule syncRule)
         {
-            this.device = device;
+            this.RemoteDevice = device;
+            this.SyncRule = syncRule;
+            this.Files = new List<LocalRemoteFilesPair>();
+            this.SyncInProgress = false;
         }
 
-        public async void run()
+        public async Task FetchFilesList()
         {
-            SyncClient syncClient = new SyncClient(device.IpAddress, device.Port);
+            SyncClient syncClient = new SyncClient(RemoteDevice.IpAddress, RemoteDevice.Port);
 
-            foreach (var syncRule in device.SyncRules)
+            GetFilesListResponse response = (GetFilesListResponse) await syncClient.SendRequestAsync(new GetFilesListRequest(SyncRule));
+
+            foreach (var remoteFile in response.RemoteFiles)
             {
-                if (!syncRule.IsActive)
-                    continue;
-
-                if (syncRule.SyncMethod == SyncMethod.ReadOnly || syncRule.SyncMethod == SyncMethod.ReadWrite)
-                {
-                    GetFilesListResponse response = (GetFilesListResponse) await syncClient.SendRequestAsync(new GetFilesListRequest(syncRule));
-                    compareFiles(syncRule, response.RemoteFiles);
-                }
+                string localRelativePath = System.IO.Path.Combine(remoteFile.Path.Split("/").Skip(SyncRule.RemoteDir.Split("/").Length).ToArray());
+                string localPath = System.IO.Path.Combine(SyncRule.LocalDir, localRelativePath);
+                File localFile = new File(localPath, null);
+                Files.Add(new LocalRemoteFilesPair(localFile, remoteFile));
             }
         }
 
-        private void compareFiles(SyncRule syncRule, IList<File> remoteFiles)
+        public async Task RequestFiles()
         {
-            foreach (var remoteFile in remoteFiles)
-            {
-                string localRelativePath = System.IO.Path.Combine(remoteFile.Path.Split("/").Skip(2).ToArray());
-                string localPath = System.IO.Path.Combine(syncRule.LocalDir, localRelativePath);
-                
-                if (System.IO.File.Exists(localPath))
+            await Task.Run(async () =>
                 {
-                    File localFile = new File(localPath, null);
-                    if (remoteFile.ModifyTime > localFile.ModifyTime)
-                        requestFile(remoteFile);
+                    foreach (var file in Files)
+                    {
+                        SyncClient syncClient = new SyncClient(RemoteDevice.IpAddress, RemoteDevice.Port);
+                        GetFileResponse response = (GetFileResponse)await syncClient.SendRequestAsync(new GetFileRequest(file.RemoteFile));
+                    }
                 }
-                else
-                    requestFile(remoteFile);
-            }
-        }
-
-        private async void requestFile(File remoteFile)
-        {
-            SyncClient syncClient = new SyncClient(device.IpAddress, device.Port);
-            GetFileResponse response = (GetFileResponse)await syncClient.SendRequestAsync(new GetFileRequest(remoteFile));
+            );
         }
     }
 }

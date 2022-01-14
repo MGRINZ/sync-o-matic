@@ -15,9 +15,9 @@ namespace SyncOMatic.Networking.Responses
         public IList<SharedFolder> sharedFolders;
         private SharedSubfolder localSubfolder;
 
-        public IList<File> RemoteFiles { get; private set; }
+        public List<File> RemoteFiles { get; private set; }
 
-        private IList<File> localFiles;
+        private List<File> localFiles;
         private IEnumerator<File> localFilesEnum;
         private string remotePath;
 
