@@ -14,6 +14,7 @@ namespace SyncOMatic.Networking.Responses
     public class GetFileResponse : IResponse
     {
         private IList<SharedFolder> sharedFolders;
+        private IList<SharedFolder> tempSharedFolders;
         private FileStream fileStream;
         private string remotePath;
         private Fields currentField;
@@ -22,14 +23,18 @@ namespace SyncOMatic.Networking.Responses
 
         public Model.FileSystem.File ReceivedFile { get; set; }
 
+        public bool ReceivesData { get; } = true;
+
         public GetFileResponse(IPAddress clientIp)
         {
+            ReceivesData = true;
             foreach (var device in App.RemoteDevices)
             {
                 if (!device.IpAddress.Equals(clientIp))
                     continue;
 
                 sharedFolders = device.SharedFolders;
+                tempSharedFolders = device.TempSharedFolders;
                 break;
             }
 
@@ -45,7 +50,12 @@ namespace SyncOMatic.Networking.Responses
             string[] remotePathTree = remotePath.Split("/");
             string remoteRoot = remotePathTree[1];  // index 0 is empty
             string relativePath = Path.Combine(remotePathTree.Skip(2).ToArray());
-            foreach (var folder in sharedFolders)
+
+            List<SharedFolder> allFolders = new List<SharedFolder>();
+            allFolders.AddRange(sharedFolders);
+            allFolders.AddRange(tempSharedFolders);
+
+            foreach (var folder in allFolders)
             {
                 if (folder.Name == remoteRoot && folder.CanRead)
                 {

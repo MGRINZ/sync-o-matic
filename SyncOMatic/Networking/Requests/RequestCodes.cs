@@ -4,7 +4,8 @@
     {
         GetSharedFolders,
         GetSharedSubfolders,
-        GetFileList,
-        GetFile
+        GetFilesList,
+        GetFile,
+        Sync
     }
 }

@@ -10,6 +10,8 @@ namespace SyncOMatic.Networking.Responses
 {
     public class SharedSubfoldersResponse : IResponse
     {
+        public bool ReceivesData { get; } = true;
+
         private IList<SharedFolder> sharedFolders;
         public IList<SharedSubfolder> Subfolders { get; private set; }
         private IEnumerator<SharedSubfolder> subfoldersEnum;

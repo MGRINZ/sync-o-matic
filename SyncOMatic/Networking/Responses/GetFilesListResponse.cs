@@ -13,9 +13,11 @@ namespace SyncOMatic.Networking.Responses
     public class GetFilesListResponse : IResponse
     {
         public IList<SharedFolder> sharedFolders;
+        private IList<SharedFolder> tempSharedFolders;
         private SharedSubfolder localSubfolder;
 
         public List<File> RemoteFiles { get; private set; }
+        public bool ReceivesData { get; } = true;
 
         private List<File> localFiles;
         private IEnumerator<File> localFilesEnum;
@@ -34,6 +36,7 @@ namespace SyncOMatic.Networking.Responses
                     continue;
 
                 sharedFolders = device.SharedFolders;
+                tempSharedFolders = device.TempSharedFolders;
                 break;
             }
         }
@@ -45,7 +48,12 @@ namespace SyncOMatic.Networking.Responses
             string[] remotePathTree = remotePath.Split("/");
             string remoteRoot = remotePathTree[1];  // index 0 is empty
             string relativePath = Path.Combine(remotePathTree.Skip(2).ToArray());
-            foreach (var folder in sharedFolders)
+
+            List<SharedFolder> allFolders = new List<SharedFolder>();
+            allFolders.AddRange(sharedFolders);
+            allFolders.AddRange(tempSharedFolders);
+
+            foreach (var folder in allFolders)
             {
                 if (folder.Name == remoteRoot && folder.CanRead)
                 {
@@ -97,6 +105,8 @@ namespace SyncOMatic.Networking.Responses
         }
         public void AppendReceivedData(byte[] data)
         {
+            if (data.Length == 0)
+                return;
             File file = new File();
             file.Path = Encoding.UTF8.GetString(data.AsSpan().Slice(0, data.Length - 8));
             file.ModifyTime = new DateTime(BitConverter.ToInt64(data.AsSpan().Slice(data.Length - 8, 8)));

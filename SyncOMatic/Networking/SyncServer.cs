@@ -83,7 +83,7 @@ namespace SyncOMatic.Networking
                         response = new SharedSubfoldersResponse(clientIp);
                         break;
                     }
-                    case RequestCodes.GetFileList:
+                    case RequestCodes.GetFilesList:
                     {
                         response = new GetFilesListResponse(clientIp);
                         break;
@@ -91,6 +91,11 @@ namespace SyncOMatic.Networking
                     case RequestCodes.GetFile:
                     {
                         response = new GetFileResponse(clientIp);
+                        break;
+                    }
+                    case RequestCodes.Sync:
+                    {
+                        response = new SyncResponse(clientIp);
                         break;
                     }
                 }

@@ -25,12 +25,12 @@ namespace SyncOMatic.Networking
             return instance;
         }
 
-        public async void SyncAll()
+        public void SyncAll()
         {
             if (syncAllBundle != null)
                 return;
 
-            await LoadSyncTasks();
+            LoadSyncTasks();
             StartSync();
         }
 
@@ -42,6 +42,7 @@ namespace SyncOMatic.Networking
             while(syncQueue.Count > 0)
             {
                 var queue = syncQueue[0];
+                await queue.FetchFilesList();
                 CompareFiles(queue);
                 await queue.Run();
                 syncQueue.Remove(queue);
@@ -51,7 +52,7 @@ namespace SyncOMatic.Networking
             }
         } 
 
-        private Task LoadSyncTasks()
+        private void LoadSyncTasks()
         {
             syncAllBundle = new SyncTaskBundle();
             
@@ -68,8 +69,11 @@ namespace SyncOMatic.Networking
             }
 
             syncQueue.Add(syncAllBundle);
+        }
 
-            return Task.WhenAll(syncAllBundle.FetchTasks);
+        public void AddSyncBundle(SyncTaskBundle bundle)
+        {
+            syncQueue.Add(bundle);
         }
 
         private void CompareFiles(SyncTaskBundle queue)

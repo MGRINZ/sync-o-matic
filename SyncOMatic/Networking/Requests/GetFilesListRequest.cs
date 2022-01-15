@@ -14,7 +14,7 @@ namespace SyncOMatic.Networking.Requests
         public GetFilesListRequest(SyncRule syncRule)
         {
             this.syncRule = syncRule;
-            RequestCode = RequestCodes.GetFileList;
+            RequestCode = RequestCodes.GetFilesList;
             SendsData = true;
         }
 

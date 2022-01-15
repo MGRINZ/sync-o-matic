@@ -8,6 +8,8 @@ namespace SyncOMatic.Networking.Responses
 {
     public class SharedFoldersResponse : IResponse
     {
+        public bool ReceivesData { get; } = true;
+
         public IList<SharedFolder> SharedFolders { get; private set; }
         private IEnumerator<SharedFolder> sharedFoldersEnum;
 
@@ -58,6 +60,8 @@ namespace SyncOMatic.Networking.Responses
         public void AppendReceivedData(byte[] data)
         {
             int length = data.Length;
+            if (length == 0)
+                return;
             var sharedFolder = new SharedFolder();
             sharedFolder.Name = Encoding.UTF8.GetString(data.AsSpan().Slice(0, length - 3));
             sharedFolder.Path = $"/{sharedFolder.Name}";

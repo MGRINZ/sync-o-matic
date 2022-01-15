@@ -79,7 +79,7 @@ namespace SyncOMatic.Networking
                     response = new SharedSubfoldersResponse();
                     break;
                 }
-                case RequestCodes.GetFileList:
+                case RequestCodes.GetFilesList:
                 {
                     response = new GetFilesListResponse();
                     break;
@@ -87,6 +87,11 @@ namespace SyncOMatic.Networking
                 case RequestCodes.GetFile:
                 {
                     response = new GetFileResponse(ipAddress);
+                    break;
+                }
+                case RequestCodes.Sync:
+                {
+                    response = new SyncResponse();
                     break;
                 }
             }
@@ -109,6 +114,8 @@ namespace SyncOMatic.Networking
 
         private async Task ReceiveData(IResponse response)
         {
+            if (!response.ReceivesData)
+                return;
             do
             {
                 byte[] responseLengthBytes = new byte[4];

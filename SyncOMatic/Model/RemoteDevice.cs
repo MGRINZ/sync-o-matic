@@ -1,5 +1,6 @@
 ﻿using SyncOMatic.Model.FileSystem;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net;
@@ -32,6 +33,7 @@ namespace SyncOMatic.Model
         public DateTime LastSync { get; set; }
         public ObservableCollection<SharedFolder> SharedFolders { get; private set; }
         public ObservableCollection<SyncRule> SyncRules { get; private set; }
+        public List<SharedFolder> TempSharedFolders { get; private set; }
 
         public RemoteDevice()
         {
@@ -42,6 +44,7 @@ namespace SyncOMatic.Model
             Port = 10000;
             SharedFolders = new ObservableCollection<SharedFolder>();
             SyncRules = new ObservableCollection<SyncRule>();
+            TempSharedFolders = new List<SharedFolder>();
         }
 
         public async Task UpdateHostnameAsync()
