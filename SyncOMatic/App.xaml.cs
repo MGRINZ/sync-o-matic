@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,11 +18,13 @@ namespace SyncOMatic
     /// </summary>
     public partial class App : Application
     {
+        public static readonly string AppName = "SyncOMatic";
         public static ObservableCollection<RemoteDevice> RemoteDevices { get; private set; }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             RemoteDevices = new ObservableCollection<RemoteDevice>();
+
             SyncServer.GetInstance().Start();
 
             var mWindow = new MainWindow(RemoteDevices);

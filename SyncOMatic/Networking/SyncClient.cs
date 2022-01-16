@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SyncOMatic.Networking
 {
@@ -25,9 +26,15 @@ namespace SyncOMatic.Networking
         public async Task<IResponse> SendRequestAsync(IRequest request)
         {
             tcpClient = new TcpClient();
-            tcpClient.Connect(ipAddress, port);
+
+            IAsyncResult result = tcpClient.BeginConnect(ipAddress, port, null, null);
+            result.AsyncWaitHandle.WaitOne(10000);
             if (!tcpClient.Connected)
+            {
+                MessageBox.Show($"Nie udało się nawiązać połączenia z {ipAddress}:{port}", "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
+            }
+            tcpClient.EndConnect(result);
 
             SendRequestCode(request.RequestCode);
             SendClientId("0123456789"); // for future use

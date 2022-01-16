@@ -32,6 +32,9 @@ namespace SyncOMatic.Networking.Responses
         {
             foreach (var device in App.RemoteDevices)
             {
+                if (!device.IsActive)
+                    continue;
+
                 if (!device.IpAddress.Equals(clientIp))
                     continue;
 

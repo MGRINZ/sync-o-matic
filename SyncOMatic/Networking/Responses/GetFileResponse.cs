@@ -30,6 +30,9 @@ namespace SyncOMatic.Networking.Responses
             ReceivesData = true;
             foreach (var device in App.RemoteDevices)
             {
+                if (!device.IsActive)
+                    continue;
+
                 if (!device.IpAddress.Equals(clientIp))
                     continue;
 
@@ -82,6 +85,7 @@ namespace SyncOMatic.Networking.Responses
                 else
                     data = new byte[dataAvailable];
                 fileStream.Read(data, 0, data.Length);
+                fileStream.Flush();
             }
 
             return data;
@@ -110,7 +114,10 @@ namespace SyncOMatic.Networking.Responses
             else if(currentField == Fields.FileStream)
             {
                 if(fileStream != null)
+                {
                     fileStream.Write(data);
+                    fileStream.Flush();
+                }
             }
         }
 

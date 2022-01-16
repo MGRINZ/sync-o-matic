@@ -30,7 +30,11 @@ namespace SyncOMatic.View
         {
             var syncClient = new SyncClient(ipAddress, port);
             SharedFoldersResponse response = (SharedFoldersResponse)await syncClient.SendRequestAsync(new SharedFoldersRequest());
-            SharedFolders = new ObservableCollection<SharedFolder>(response.SharedFolders);
+            
+            if (response == null)
+                SharedFolders = new ObservableCollection<SharedFolder>();
+            else
+                SharedFolders = new ObservableCollection<SharedFolder>(response.SharedFolders);
 
             this.DataContext = this;
 

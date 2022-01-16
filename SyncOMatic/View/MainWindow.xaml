@@ -23,8 +23,6 @@
                 </Grid.RowDefinitions>
                 <Label>Nazwa hosta:</Label>
                 <Label Grid.Column="1" Content="{Binding Hostname}" />
-                <Label Grid.Row="1">Adres IP:</Label>
-                <Label Grid.Row="1" Grid.Column="1">{Adres IP}</Label>
             </Grid>
         </GroupBox>
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right">
@@ -74,13 +72,22 @@
                                     </GridViewColumn.DisplayMemberBinding>
                                 </GridViewColumn>
                                 <GridViewColumn Header="Port" DisplayMemberBinding="{Binding Port}" />
-                                <GridViewColumn Header="Ostatnia synchronizacja" DisplayMemberBinding="{Binding LastSync}" />
+                                <GridViewColumn Header="Ostatnia synchronizacja">
+                                    <GridViewColumn.DisplayMemberBinding>
+                                        <Binding Path="LastSync" Converter="{StaticResource LastSyncConverter}" />
+                                    </GridViewColumn.DisplayMemberBinding>
+                                </GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
                 </DockPanel>
-                <StackPanel Grid.Column="1" Margin="5">
+                <StackPanel Grid.Column="1" Margin="5" MinWidth="250" MaxWidth="250">
                     <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Padding" Value="5" />
+                            </Style>
+                        </Grid.Resources>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
@@ -95,17 +102,29 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Label>Aktywny:</Label>
-                        <Label Grid.Column="1">{Aktywny}</Label>
+                        <TextBlock Grid.Column="1">
+                            <TextBlock.Text>
+                                <Binding ElementName="remoteDevicesListView" Path="SelectedItem.IsActive" Mode="OneWay">
+                                    <Binding.Converter>
+                                        <StaticResource ResourceKey="IsActiveConverter" />
+                                    </Binding.Converter>
+                                </Binding>
+                            </TextBlock.Text>
+                        </TextBlock>
                         <Label Grid.Row="1">Nazwa:</Label>
-                        <Label Grid.Column="1" Grid.Row="1">{Nazwa}</Label>
+                        <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ElementName=remoteDevicesListView, Path=SelectedItem.Name}"/>
                         <Label Grid.Row="2">Nazwa hosta:</Label>
-                        <Label Grid.Column="1" Grid.Row="2">{Nazwa hosta}</Label>
+                        <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding ElementName=remoteDevicesListView, Path=SelectedItem.Hostname}"/>
                         <Label Grid.Row="3">Adres IP:</Label>
-                        <Label Grid.Column="1" Grid.Row="3">{Adres IP}</Label>
+                        <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding ElementName=remoteDevicesListView, Path=SelectedItem.IpAddress}"/>
                         <Label Grid.Row="4">Port:</Label>
-                        <Label Grid.Column="1" Grid.Row="4">{Port}</Label>
+                        <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding ElementName=remoteDevicesListView, Path=SelectedItem.Port}" />
                         <Label Grid.Row="5">Ostatnia synchronizacja:</Label>
-                        <Label Grid.Column="1" Grid.Row="5">{Ostatnia synchronizacja}</Label>
+                        <TextBlock Grid.Column="1" Grid.Row="5">
+                            <TextBlock.Text>
+                                <Binding ElementName="remoteDevicesListView" Path="SelectedItem.LastSync" Converter="{StaticResource LastSyncConverter}" />
+                            </TextBlock.Text>
+                        </TextBlock>
                     </Grid>
                     <Button Content="Synchronizuj" HorizontalAlignment="Center" Width="100" Margin="10" Click="Sync_Click"/>
                 </StackPanel>

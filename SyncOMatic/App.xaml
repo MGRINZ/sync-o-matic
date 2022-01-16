@@ -16,6 +16,8 @@
 
         <converters:IPAddressStringConverter x:Key="IPAddressStringConverter" />
         <converters:EnumConverter x:Key="EnumConverter" />
+        <converters:IsActiveConverter x:Key="IsActiveConverter" />
+        <converters:LastSyncConverter x:Key="LastSyncConverter" />
 
         <validationrules:PathValidationRule x:Key="PathValidationRule" />
 

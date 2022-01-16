@@ -14,7 +14,20 @@ namespace SyncOMatic.Model
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public bool IsActive { get; set; }
+        private bool isActive;
+        public bool IsActive
+        {
+            get => isActive;
+            set
+            {
+                if (value != isActive)
+                {
+                    isActive = value;
+                    NotifyPropertyChanged("IsActive");
+                }
+            }
+        }
+
         public string Name { get; set; }
         public string Hostname
         {
@@ -30,7 +43,20 @@ namespace SyncOMatic.Model
         }
         public IPAddress IpAddress { get; set; }
         public short Port { get; set; }
-        public DateTime LastSync { get; set; }
+
+        private DateTime lastSync;
+        public DateTime LastSync
+        {
+            get => lastSync;
+            set
+            {
+                if (value != lastSync)
+                {
+                    lastSync = value;
+                    NotifyPropertyChanged("LastSync");
+                }
+            }
+        }
         public ObservableCollection<SharedFolder> SharedFolders { get; private set; }
         public ObservableCollection<SyncRule> SyncRules { get; private set; }
         public List<SharedFolder> TempSharedFolders { get; private set; }

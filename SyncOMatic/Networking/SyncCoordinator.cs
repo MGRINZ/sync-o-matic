@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SyncOMatic.Networking
@@ -45,6 +46,9 @@ namespace SyncOMatic.Networking
                 await queue.FetchFilesList();
                 CompareFiles(queue);
                 await queue.Run();
+                foreach (var syncTask in queue.GetBundle)
+                    syncTask.RemoteDevice.LastSync = DateTime.Now;
+
                 syncQueue.Remove(queue);
 
                 if (queue == syncAllBundle)
@@ -58,6 +62,9 @@ namespace SyncOMatic.Networking
             
             foreach (var device in App.RemoteDevices)
             {
+                if (!device.IsActive)
+                    continue;
+
                 foreach (var syncRule in device.SyncRules)
                 {
                     if (!syncRule.IsActive)

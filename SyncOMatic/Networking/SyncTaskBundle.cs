@@ -54,6 +54,13 @@ namespace SyncOMatic.Networking
             
             await Task.WhenAll(runningTasks);
 
+            string tempPath = System.IO.Path.Combine(
+                System.IO.Path.GetTempPath(),
+                App.AppName
+            );
+            if(System.IO.Directory.Exists(tempPath))
+                System.IO.Directory.Delete(tempPath, true);
+
             await SendFiles();
         }
 

@@ -13,14 +13,12 @@ namespace SyncOMatic.Networking
         public RemoteDevice RemoteDevice { get; private set; }
         public SyncRule SyncRule { get; private set; }
         public List<LocalRemoteFilesPair> Files { get; private set; }
-        public bool SyncInProgress { get; private set; }
 
         public SyncTask(RemoteDevice device, SyncRule syncRule)
         {
             this.RemoteDevice = device;
             this.SyncRule = syncRule;
             this.Files = new List<LocalRemoteFilesPair>();
-            this.SyncInProgress = false;
         }
 
         public async Task FetchFilesList()
@@ -46,6 +44,9 @@ namespace SyncOMatic.Networking
                     {
                         SyncClient syncClient = new SyncClient(RemoteDevice.IpAddress, RemoteDevice.Port);
                         GetFileResponse response = (GetFileResponse)await syncClient.SendRequestAsync(new GetFileRequest(file.RemoteFile));
+                        System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(file.LocalFile.Path));
+                        System.IO.File.Move(response.ReceivedFile.Path, file.LocalFile.Path, true);
+                        System.IO.File.SetLastWriteTime(file.LocalFile.Path, file.RemoteFile.ModifyTime);
                     }
                 }
             );
