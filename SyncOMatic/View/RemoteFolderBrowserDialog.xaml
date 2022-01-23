@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SyncOMatic"
         xmlns:model="clr-namespace:SyncOMatic.Model.FileSystem"
         mc:Ignorable="d"
-        Title="RemoteFolderBrowserDialog" MinHeight="450" MinWidth="450" Width="450" Height="450"
+        Title="Wybierz katalog zdalny" MinHeight="450" MinWidth="450" Width="450" Height="450"
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" >
     <DockPanel Margin="5">
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right">

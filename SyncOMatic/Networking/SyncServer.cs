@@ -65,6 +65,8 @@ namespace SyncOMatic.Networking
         {
             try
             {
+                tcpClient.GetStream().ReadTimeout = 10000;
+                tcpClient.GetStream().WriteTimeout = 10000;
                 RequestCodes requestCode = GetRequestCode(tcpClient);
                 string clientId = await GetClientId(tcpClient); // For future use
                 IPAddress clientIp = ((IPEndPoint)tcpClient.Client.RemoteEndPoint).Address;

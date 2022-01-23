@@ -36,6 +36,9 @@ namespace SyncOMatic.Networking
             }
             tcpClient.EndConnect(result);
 
+            tcpClient.GetStream().ReadTimeout = 10000;
+            tcpClient.GetStream().WriteTimeout = 10000;
+
             SendRequestCode(request.RequestCode);
             SendClientId("0123456789"); // for future use
 
@@ -63,9 +66,20 @@ namespace SyncOMatic.Networking
                 }
             }
             else
-                await ReceiveData(response);
+            {
+                try
+                {
+                    await ReceiveData(response);
+                }
+                catch (IOException e)
+                {
+                    Logger.LogInfo(e);
+                    return response;
+                }
+            }
 
-            response.OnDataEnd();
+            if(response != null)
+                response.OnDataEnd();
 
             tcpClient.Close();
             return response;
