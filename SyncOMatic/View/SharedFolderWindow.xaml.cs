@@ -6,9 +6,6 @@ using System.Windows;
 
 namespace SyncOMatic.View
 {
-    /// <summary>
-    /// Logika interakcji dla klasy SharedFolderWindow.xaml
-    /// </summary>
     public partial class SharedFolderWindow : Window, IAddEditDelete
     {
         public int SelectedIndex { get; set; }

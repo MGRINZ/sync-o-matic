@@ -40,6 +40,7 @@ namespace SyncOMatic.Networking.Requests
                 sharedFolder.CanRead = true;
                 sharedFolder.IsActive = true;
                 sharedFolder.Path = syncTask.SyncRule.LocalDir;
+                sharedFolder.SendSyncRule = syncTask.SyncRule;
 
                 using (var sha = SHA256.Create())
                 {

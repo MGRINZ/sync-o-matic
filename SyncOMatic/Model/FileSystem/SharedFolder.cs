@@ -34,6 +34,8 @@ namespace SyncOMatic.Model.FileSystem
             }
         }
 
+        public SyncRule SendSyncRule { get; set; }
+
         public SharedFolder()
         {
             IsActive = false;

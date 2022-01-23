@@ -10,15 +10,22 @@
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         ShowInTaskbar="False"
-        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+        Closing="Window_Closing">
     <StackPanel Margin="5">
         <Label>Wartość wykluczenia</Label>
-        <TextBox />
+        <TextBox>
+            <Binding Path="Pattern">
+                <Binding.ValidationRules>
+                    <StaticResource ResourceKey="EmptyStringValidationRule" />
+                </Binding.ValidationRules>
+            </Binding>
+        </TextBox>
         <WrapPanel HorizontalAlignment="Right">
             <WrapPanel.Resources>
                 <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
             </WrapPanel.Resources>
-            <Button Content="Zapisz" />
+            <Button Content="Zapisz" Click="Save_Click" />
             <Button Content="Anuluj" Click="Cancel_Click" />
         </WrapPanel>
     </StackPanel>

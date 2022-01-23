@@ -109,7 +109,7 @@
                         </WrapPanel.Resources>
                         <Button Content="Dodaj" Click="AddSyncRule_Click" />
                         <Button Content="Zmień" Click="EditSyncRule_Click"/>
-                        <Button Content="Usuń" />
+                        <Button Content="Usuń" Click="DeleteSyncRule_Click" />
                     </WrapPanel>
                     <ListView Name="syncRulesListView" ItemsSource="{Binding SyncRules}">
                         <ListView.View>

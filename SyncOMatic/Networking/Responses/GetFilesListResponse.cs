@@ -65,6 +65,23 @@ namespace SyncOMatic.Networking.Responses
                     localSubfolder.Path = localPath;
 
                     localFiles = LoadFiles(localSubfolder);
+
+                    if (tempSharedFolders.Contains(folder))
+                    {
+                        for (int i = localFiles.Count - 1; i >= 0; i--)
+                        {
+                            File file = localFiles[i];
+                            foreach (var exclusion in (folder as SharedFolder).SendSyncRule.FileExclusions)
+                            {
+                                if (exclusion.MatchFile(file))
+                                {
+                                    localFiles.RemoveAt(i);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                     localFilesEnum = localFiles.GetEnumerator();
                     break;
                 }

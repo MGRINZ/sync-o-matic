@@ -54,6 +54,13 @@ namespace SyncOMatic.Model
         public SyncRule()
         {
             SyncMethod = SyncMethod.ReadWrite;
+            FileExclusions = new ObservableCollection<FileExclusion>();
+            FileExclusions.Add(new FileExclusion(".*"));
+            FileExclusions.Add(new FileExclusion("*.tmp"));
+            FileExclusions.Add(new FileExclusion("~*"));
+            FileExclusions.Add(new FileExclusion("*~.*"));
+            FileExclusions.Add(new FileExclusion("desktop.ini"));
+            FileExclusions.Add(new FileExclusion("Thumbs.db"));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

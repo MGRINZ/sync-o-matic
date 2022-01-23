@@ -42,6 +42,7 @@ namespace SyncOMatic.Networking.Responses
         public void ParseRequestData(byte[] data)
         {
             var syncRule = new SyncRule();
+            syncRule.FileExclusions.Clear();
             syncRule.IsActive = true;
             syncRule.RemoteDir = $"/{Encoding.UTF8.GetString(data.AsSpan(0, 64))}";
             syncRule.SyncMethod = SyncMethod.ReadOnly;

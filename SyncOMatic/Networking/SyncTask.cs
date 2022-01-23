@@ -4,6 +4,7 @@ using SyncOMatic.Networking.Requests;
 using SyncOMatic.Networking.Responses;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SyncOMatic.Networking
@@ -32,7 +33,19 @@ namespace SyncOMatic.Networking
                 string localRelativePath = System.IO.Path.Combine(remoteFile.Path.Split("/").Skip(SyncRule.RemoteDir.Split("/").Length).ToArray());
                 string localPath = System.IO.Path.Combine(SyncRule.LocalDir, localRelativePath);
                 File localFile = new File(localPath, null);
-                Files.Add(new LocalRemoteFilesPair(localFile, remoteFile));
+
+                bool exclude = false;
+                foreach (var exclusion in SyncRule.FileExclusions)
+                {
+                    if (exclusion.MatchFile(localFile))
+                    {
+                        exclude = true;
+                        break;
+                    }
+                }
+
+                if(!exclude)
+                    Files.Add(new LocalRemoteFilesPair(localFile, remoteFile));
             }
         }
 

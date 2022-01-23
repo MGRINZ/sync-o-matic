@@ -1,9 +1,9 @@
-﻿<Window x:Class="SyncOMatic.View.SyncDetailsWindow"
+﻿<local:AddEditDeleteWindow x:Class="SyncOMatic.View.SyncDetailsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SyncOMatic"
+        xmlns:local="clr-namespace:SyncOMatic.View"
         xmlns:model="clr-namespace:SyncOMatic.Model"
         mc:Ignorable="d"
         Title="Ustawienia synchronizacji" Height="450" Width="450"
@@ -65,18 +65,11 @@
                         <Style BasedOn="{StaticResource ButtonsGroup}" TargetType="Button" />
                     </WrapPanel.Resources>
                     <Button Content="Dodaj" Click="AddExclusion_Click" />
-                    <Button Content="Zmień" />
-                    <Button Content="Usuń" />
+                    <Button Content="Zmień" Click="EditExclusion_Click" />
+                    <Button Content="Usuń" Click="DeleteExclusion_Click" />
                 </WrapPanel>
-                <ListBox>
-                    <ListBoxItem>.*</ListBoxItem>
-                    <ListBoxItem>*.tmp</ListBoxItem>
-                    <ListBoxItem>~*</ListBoxItem>
-                    <ListBoxItem>*~.*</ListBoxItem>
-                    <ListBoxItem>desktop.ini</ListBoxItem>
-                    <ListBoxItem>Thumbs.db</ListBoxItem>
-                </ListBox>
+                <ListBox x:Name="exclusionsListView" ItemsSource="{Binding FileExclusions}" />
             </DockPanel>
         </GroupBox>
     </DockPanel>
-</Window>
+</local:AddEditDeleteWindow>

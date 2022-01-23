@@ -20,6 +20,7 @@
         <converters:LastSyncConverter x:Key="LastSyncConverter" />
 
         <validationrules:PathValidationRule x:Key="PathValidationRule" />
+        <validationrules:EmptyStringValidationRule x:Key="EmptyStringValidationRule" />
 
         <x:Array x:Key="SyncMethods" Type="sys:String">
             <sys:String>Wyślij i pobierz</sys:String>

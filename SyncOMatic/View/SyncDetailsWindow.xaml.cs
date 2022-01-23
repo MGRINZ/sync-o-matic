@@ -3,6 +3,7 @@ using SyncOMatic.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -21,7 +22,7 @@ namespace SyncOMatic.View
     /// <summary>
     /// Logika interakcji dla klasy SyncDetailsWindow.xaml
     /// </summary>
-    public partial class SyncDetailsWindow : Window, IAddEditDelete
+    public partial class SyncDetailsWindow : AddEditDeleteWindow, IAddEditDelete
     {
         private IPAddress ipAddress;
         private short port;
@@ -56,8 +57,19 @@ namespace SyncOMatic.View
         private void AddExclusion_Click(object sender, RoutedEventArgs e)
         {
             var eDialog = new ExclusionDialog();
-            eDialog.Owner = this;
-            eDialog.ShowDialog();
+            AddItem(eDialog, SyncRule.FileExclusions);
+        }
+
+        private void EditExclusion_Click(object sender, RoutedEventArgs e)
+        {
+            var eDialog = new ExclusionDialog();
+            eDialog.Title = "Edytuj wykluczenie";
+            EditItem(eDialog, exclusionsListView, SyncRule.FileExclusions);
+        }
+
+        private void DeleteExclusion_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteItem(exclusionsListView, SyncRule.FileExclusions);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -67,6 +79,15 @@ namespace SyncOMatic.View
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            if (SyncRule.LocalDir == null || SyncRule.LocalDir.Trim().Length == 0)
+                return;
+
+            if (!Directory.Exists(SyncRule.LocalDir))
+                return;
+
+            if (SyncRule.RemoteDir == null || SyncRule.RemoteDir.Trim().Length == 0)
+                return;
+
             save = true;
 
             Close();

@@ -72,6 +72,11 @@ namespace SyncOMatic.View
             EditItem(sdWindow, syncRulesListView, RemoteDevice.SyncRules);
         }
 
+        private void DeleteSyncRule_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteItem(syncRulesListView, RemoteDevice.SyncRules);
+        }
+
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             save = true;
